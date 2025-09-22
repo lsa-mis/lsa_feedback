@@ -97,7 +97,21 @@ end
 
 ## Usage
 
-### Basic Usage
+### Step 1: Mount the Engine Routes
+
+Add the feedback gem routes to your application's `config/routes.rb`:
+
+```ruby
+# config/routes.rb
+Rails.application.routes.draw do
+  # Your existing routes...
+
+  # Mount the feedback gem engine
+  mount FeedbackGem::Engine => "/feedback_gem", as: "feedback_gem"
+end
+```
+
+### Step 2: Add the Feedback Modal
 
 Add the feedback modal to your layout:
 
@@ -256,9 +270,11 @@ The gem is available as open source under the terms of the [MIT License](https:/
    - Make sure you've configured your TDX credentials properly
    - Check that your Rails credentials are accessible
 
-2. **Modal doesn't appear**
+2. **Modal doesn't appear or form submission fails**
    - Ensure you've included `<%= feedback_gem %>` in your layout
+   - **Check that you've mounted the engine routes** in your `config/routes.rb`
    - Check browser console for JavaScript errors
+   - Verify the `/feedback_gem/feedback` endpoint is accessible
 
 3. **Styling conflicts**
    - All FeedbackGem styles are prefixed with `feedback-gem-`

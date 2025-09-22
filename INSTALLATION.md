@@ -81,7 +81,21 @@ export TDX_CLIENT_SECRET="your_client_secret"
 export TDX_RESPONSIBLE_GROUP_ID="123"
 ```
 
-## Step 3: Add to Your Layout
+## Step 3: Mount the Engine Routes
+
+Add the feedback gem routes to your application's `config/routes.rb`:
+
+```ruby
+# config/routes.rb
+Rails.application.routes.draw do
+  # Your existing routes...
+
+  # Mount the feedback gem engine
+  mount FeedbackGem::Engine => "/feedback_gem", as: "feedback_gem"
+end
+```
+
+## Step 4: Add to Your Layout
 
 Add the feedback modal to your application layout:
 
@@ -122,7 +136,7 @@ Or use the all-in-one helper:
 </html>
 ```
 
-## Step 4: Customize User Email (Optional)
+## Step 5: Customize User Email (Optional)
 
 Override the user email detection in your ApplicationController:
 
@@ -137,7 +151,7 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-## Step 5: Test the Installation
+## Step 6: Test the Installation
 
 1. Start your Rails server:
    ```bash
@@ -156,10 +170,12 @@ end
 
 ### Common Issues
 
-**1. Modal doesn't appear**
+**1. Modal doesn't appear or form submission fails**
 - Check that you've included the gem in your layout
+- **Verify you've mounted the engine routes** in your `config/routes.rb`
 - Check browser console for JavaScript errors
 - Ensure CSS is loading properly
+- Verify the `/feedback_gem/feedback` endpoint is accessible
 
 **2. "client_id is required" error**
 - Verify your credentials are configured correctly
