@@ -1,6 +1,7 @@
 module FeedbackGem
-  class FeedbackController < ApplicationController
+  class FeedbackController < ::ApplicationController
     protect_from_forgery with: :exception
+    before_action :set_feedback_gem_data
 
     def create
       ticket_client = TicketClient.new
