@@ -105,7 +105,7 @@ Add the feedback modal to your application layout:
 <html>
   <head>
     <!-- Your existing head content -->
-    <%= feedback_gem_assets %>
+    <%= feedback_gem_css %>
   </head>
 
   <body>
@@ -113,6 +113,9 @@ Add the feedback modal to your application layout:
 
     <!-- Add the feedback modal -->
     <%= feedback_gem_modal %>
+
+    <!-- Add the JavaScript before closing body tag -->
+    <%= feedback_gem_js %>
   </body>
 </html>
 ```

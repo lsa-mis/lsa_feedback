@@ -124,10 +124,23 @@ That's it! The feedback button will appear in the bottom-right corner of your ap
 
 ### Advanced Usage
 
-You can also include components separately:
+You can also include components separately for more control over placement:
 
 ```erb
-<!-- Include just the assets -->
+<!-- In your layout head section -->
+<%= feedback_gem_css %>
+
+<!-- In your layout body section (before closing </body> tag) -->
+<%= feedback_gem_js %>
+
+<!-- Include just the modal (assets must be included separately) -->
+<%= feedback_gem_modal %>
+```
+
+Or use the combined assets helper:
+
+```erb
+<!-- Include both CSS and JavaScript together -->
 <%= feedback_gem_assets %>
 
 <!-- Include just the modal (assets must be included separately) -->
@@ -250,8 +263,10 @@ end
 
 ### View Helpers
 
-- `feedback_gem` - Includes both assets and modal
-- `feedback_gem_assets` - Includes only CSS and JavaScript
+- `feedback_gem` - Includes both assets and modal (all-in-one)
+- `feedback_gem_assets` - Includes both CSS and JavaScript
+- `feedback_gem_css` - Includes only the CSS stylesheet
+- `feedback_gem_js` - Includes only the JavaScript file
 - `feedback_gem_modal` - Includes only the modal HTML
 
 ## Contributing
@@ -275,6 +290,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
    - **Check that you've mounted the engine routes** in your `config/routes.rb`
    - Check browser console for JavaScript errors
    - Verify the `/feedback_gem/feedback` endpoint is accessible
+   - If using separate helpers, ensure CSS is in `<head>` and JS is before `</body>`
 
 3. **Styling conflicts**
    - All FeedbackGem styles are prefixed with `feedback-gem-`
