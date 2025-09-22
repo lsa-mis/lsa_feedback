@@ -7,10 +7,10 @@ module FeedbackGem
 
     # Includes the feedback gem assets
     def feedback_gem_assets
-      content_for :head do
+      content_for(:head) do
         stylesheet_link_tag 'feedback_gem', 'data-turbo-track': 'reload'
       end +
-      content_for :body do
+      content_for(:body) do
         javascript_include_tag 'feedback_gem', 'data-turbo-track': 'reload'
       end
     end

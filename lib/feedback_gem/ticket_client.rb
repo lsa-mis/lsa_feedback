@@ -40,7 +40,7 @@ module FeedbackGem
         TypeID: @configuration.default_type_id,
         FormID: @configuration.default_form_id,
         Classification: @configuration.default_classification,
-        Title: feedback_data[:title] || "User Feedback",
+        Title: feedback_data[:title] || 'User Feedback',
         Description: build_description(feedback_data),
         StatusID: @configuration.default_status_id,
         PriorityID: feedback_data[:priority_id] || @configuration.default_priority_id,
@@ -54,32 +54,32 @@ module FeedbackGem
     def build_description(feedback_data)
       description_parts = []
 
-      description_parts << "<h3>User Feedback</h3>"
-      description_parts << "<p><strong>Feedback:</strong></p>"
+      description_parts << '<h3>User Feedback</h3>'
+      description_parts << '<p><strong>Feedback:</strong></p>'
       description_parts << "<p>#{sanitize_html(feedback_data[:feedback])}</p>"
 
       if feedback_data[:category].present?
-        description_parts << "<p><strong>Category:</strong> #{sanitize_html(feedback_data[:category])}</p>"
+        description_parts << '<p><strong>Category:</strong> #{sanitize_html(feedback_data[:category])}</p>'
       end
 
       if feedback_data[:url].present?
-        description_parts << "<p><strong>Page URL:</strong> #{sanitize_html(feedback_data[:url])}</p>"
+        description_parts << '<p><strong>Page URL:</strong> #{sanitize_html(feedback_data[:url])}</p>'
       end
 
       if feedback_data[:user_agent].present?
-        description_parts << "<p><strong>Browser:</strong> #{sanitize_html(feedback_data[:user_agent])}</p>"
+        description_parts << '<p><strong>Browser:</strong> #{sanitize_html(feedback_data[:user_agent])}</p>'
       end
 
       if feedback_data[:additional_info].present?
-        description_parts << "<p><strong>Additional Information:</strong></p>"
+        description_parts << '<p><strong>Additional Information:</strong></p>'
         description_parts << "<p>#{sanitize_html(feedback_data[:additional_info])}</p>"
       end
 
-      description_parts.join("\n")
+      description_parts.join('\n')
     end
 
     def sanitize_html(text)
-      return "" unless text
+      return '' unless text
 
       # Basic HTML escaping
       text.to_s

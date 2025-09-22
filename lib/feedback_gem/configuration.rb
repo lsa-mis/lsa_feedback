@@ -7,13 +7,13 @@ module FeedbackGem
 
     def initialize
       # TDX API Configuration - Based on the YAML documentation
-      @oauth_url = "https://gw-test.api.it.umich.edu/um/oauth2"
-      @api_base_url = "https://gw-test.api.it.umich.edu/um/it"
+      @oauth_url = 'https://gw-test.api.it.umich.edu/um/oauth2'
+      @api_base_url = 'https://gw-test.api.it.umich.edu/um/it'
 
       # Default TDX ticket values from API documentation
       @default_type_id = 28 # TeamDynamix type from example
       @default_form_id = 20 # Request Form from example
-      @default_classification = "46" # Request classification
+      @default_classification = '46' # Request classification
       @default_status_id = 77 # New status
       @default_priority_id = 20 # Medium priority
       @default_source_id = 8 # Systems source
@@ -31,11 +31,11 @@ module FeedbackGem
     end
 
     def oauth_scope
-      "https://gw-test.api.it.umich.edu/um/it"
+      'https://gw-test.api.it.umich.edu/um/it'
     end
 
     def grant_type
-      "client_credentials"
+      'client_credentials'
     end
 
     def valid?
@@ -43,9 +43,9 @@ module FeedbackGem
     end
 
     def validate!
-      raise Error, "client_id is required" unless client_id.present?
-      raise Error, "client_secret is required" unless client_secret.present?
-      raise Error, "default_responsible_group_id is required" unless default_responsible_group_id.present?
+      raise Error, 'client_id is required' unless client_id.present?
+      raise Error, 'client_secret is required' unless client_secret.present?
+      raise Error, 'default_responsible_group_id is required' unless default_responsible_group_id.present?
     end
   end
 end

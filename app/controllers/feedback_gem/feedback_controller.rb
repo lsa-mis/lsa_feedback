@@ -21,7 +21,7 @@ module FeedbackGem
 
         render json: {
           success: true,
-          message: "Thank you for your feedback! Your ticket has been created.",
+          message: 'Thank you for your feedback! Your ticket has been created.',
           ticket_id: ticket_response['ID']
         }, status: :created
       rescue FeedbackGem::Error => e
@@ -29,14 +29,14 @@ module FeedbackGem
 
         render json: {
           success: false,
-          message: "Sorry, there was an error submitting your feedback. Please try again later."
+          message: 'Sorry, there was an error submitting your feedback. Please try again later.'
         }, status: :unprocessable_entity
       rescue StandardError => e
         Rails.logger.error "Unexpected error in FeedbackGem: #{e.message}\n#{e.backtrace.join("\n")}"
 
         render json: {
           success: false,
-          message: "Sorry, there was an unexpected error. Please try again later."
+          message: 'Sorry, there was an unexpected error. Please try again later.'
         }, status: :internal_server_error
       end
     end
