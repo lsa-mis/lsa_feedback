@@ -2,7 +2,8 @@ module FeedbackGem
   module ViewHelpers
     # Renders the feedback modal and trigger button
     def feedback_gem_modal
-      render partial: 'feedback_gem/shared/feedback_modal'
+      # Use raw to ensure HTML is properly rendered, not escaped
+      raw(render partial: 'feedback_gem/shared/feedback_modal')
     end
 
     # Includes the feedback gem assets
