@@ -107,11 +107,11 @@ module FeedbackGem
     # Includes the feedback gem assets
     def feedback_gem_assets
       head_content = content_for(:head) do
-        stylesheet_link_tag 'feedback_gem', 'data-turbo-track': 'reload'
+        stylesheet_link_tag 'feedback_gem', 'data-turbo-track': 'reload', preload: false
       end
 
       body_content = content_for(:body) do
-        javascript_include_tag 'feedback_gem', 'data-turbo-track': 'reload'
+        javascript_include_tag 'feedback_gem', 'data-turbo-track': 'reload', defer: true
       end
 
       # Ensure we return a string, not nil
