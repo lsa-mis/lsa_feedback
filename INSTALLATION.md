@@ -36,12 +36,29 @@ Add your TDX configuration:
 
 ```yaml
 feedback_gem:
+  # Required OAuth Configuration
+  oauth_url: 'https://your-tdx-instance.com/oauth2'
+  api_base_url: 'https://your-tdx-instance.com/api'
   client_id: your_tdx_client_id_here
   client_secret: your_tdx_client_secret_here
-  responsible_group_id: 123  # Your TDX group ID that will receive tickets
-  app_id: 31                 # Optional: Your TDX application ID
-  service_id: 67             # Optional: Your TDX service ID
+
+  # Required TDX Configuration
+  app_id: 31
+  account_id: 456
+  service_offering_id: 789
+
+  # Required Ticket Configuration
+  default_type_id: 100
+  default_form_id: 200
+  default_classification: '300'
+  default_status_id: 400
+  default_priority_id: 500
+  default_source_id: 600
+  default_responsible_group_id: 700
+  default_service_id: 800
 ```
+
+**Note**: The gem will automatically configure itself from these credentials - no additional setup required!
 
 ### Option B: Environment Variables
 

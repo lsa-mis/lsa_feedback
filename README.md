@@ -65,7 +65,7 @@ feedback_gem:
 
 ### Manual Configuration
 
-Alternatively, configure the gem in an initializer:
+If you prefer not to use Rails credentials, you can configure the gem manually in an initializer:
 
 ```ruby
 # config/initializers/feedback_gem.rb
@@ -92,6 +92,8 @@ FeedbackGem.configure do |config|
   config.default_service_id = ENV['TDX_SERVICE_ID'].to_i
 end
 ```
+
+**Note**: If you use Rails credentials (recommended), the gem will automatically configure itself and you don't need to create this initializer file.
 
 ## Usage
 

@@ -32,18 +32,32 @@ module FeedbackGem
 
     # Auto-configure if credentials are available
     config.after_initialize do
-      if Rails.application.credentials.dig(:feedback_gem, :client_id) &&
-         Rails.application.credentials.dig(:feedback_gem, :client_secret) &&
-         Rails.application.credentials.dig(:feedback_gem, :responsible_group_id)
+      credentials = Rails.application.credentials.feedback_gem
 
+      if credentials&.dig(:client_id) && credentials&.dig(:client_secret) && credentials&.dig(:default_responsible_group_id)
         FeedbackGem.configure do |config|
-          config.client_id = Rails.application.credentials.dig(:feedback_gem, :client_id)
-          config.client_secret = Rails.application.credentials.dig(:feedback_gem, :client_secret)
-          config.default_responsible_group_id = Rails.application.credentials.dig(:feedback_gem, :responsible_group_id)
+          # Load configuration from Rails credentials
 
-          # Optional overrides from credentials
-          config.app_id = Rails.application.credentials.dig(:feedback_gem, :app_id) if Rails.application.credentials.dig(:feedback_gem, :app_id)
-          config.default_service_id = Rails.application.credentials.dig(:feedback_gem, :service_id) if Rails.application.credentials.dig(:feedback_gem, :service_id)
+          # Required OAuth Configuration
+          config.oauth_url = credentials[:oauth_url]
+          config.api_base_url = credentials[:api_base_url]
+          config.client_id = credentials[:client_id]
+          config.client_secret = credentials[:client_secret]
+
+          # Required TDX Configuration
+          config.app_id = credentials[:app_id]
+          config.account_id = credentials[:account_id]
+          config.service_offering_id = credentials[:service_offering_id]
+
+          # Required Ticket Configuration
+          config.default_type_id = credentials[:default_type_id]
+          config.default_form_id = credentials[:default_form_id]
+          config.default_classification = credentials[:default_classification]
+          config.default_status_id = credentials[:default_status_id]
+          config.default_priority_id = credentials[:default_priority_id]
+          config.default_source_id = credentials[:default_source_id]
+          config.default_responsible_group_id = credentials[:default_responsible_group_id]
+          config.default_service_id = credentials[:default_service_id]
         end
       end
     end
