@@ -1,13 +1,13 @@
 # FeedbackGem
 
-A self-contained Rails gem for collecting user feedback via TeamDynamix (TDX) API. FeedbackGem provides a zero-configuration solution that integrates seamlessly with any Rails application.
+A self-contained Rails gem for collecting user feedback via TeamDynamix (TDX) API. FeedbackGem provides a secure, configurable solution that integrates seamlessly with any Rails application.
 
 ## Features
 
-- **Zero Configuration**: Works out of the box with sensible defaults
+- **Secure Configuration**: All values must be provided by your application for maximum security
 - **Self-Contained UI**: Beautiful, responsive feedback modal with its own CSS and JavaScript
 - **TDX Integration**: Direct integration with TeamDynamix API for ticket creation
-- **OAuth Authentication**: Secure client credentials flow authentication
+- **OAuth Authentication**: Secure client credentials flow authentication with tdxticket scope
 - **Mobile Responsive**: Works perfectly on desktop and mobile devices
 - **Framework Agnostic**: CSS and JavaScript work independently of your app's styling
 - **Automatic Context**: Captures page URL, user agent, and user email automatically
@@ -29,7 +29,9 @@ $ bundle install
 
 ## Configuration
 
-### Rails Credentials (Recommended)
+### Rails Credentials (Required)
+
+**Security Note**: All configuration values must be provided by your application. No default values are stored in the gem for security reasons.
 
 Add your TDX API credentials to your Rails credentials:
 
@@ -39,11 +41,26 @@ $ rails credentials:edit
 
 ```yaml
 feedback_gem:
+  # Required OAuth Configuration
+  oauth_url: 'https://gw-test.api.it.umich.edu/um/oauth2'
+  api_base_url: 'https://gw-test.api.it.umich.edu/um/it'
   client_id: your_tdx_client_id
   client_secret: your_tdx_client_secret
-  responsible_group_id: 123  # Your TDX responsible group ID
-  app_id: 31                 # Optional: Your TDX app ID (defaults to 31)
-  service_id: 67             # Optional: Your TDX service ID (defaults to 67)
+
+  # Required TDX Configuration
+  app_id: 46
+  account_id: 21
+  service_offering_id: 289
+
+  # Required Ticket Configuration
+  default_type_id: 644
+  default_form_id: 107
+  default_classification: '46'
+  default_status_id: 115
+  default_priority_id: 20
+  default_source_id: 8
+  default_responsible_group_id: 388
+  default_service_id: 2314
 ```
 
 ### Manual Configuration
@@ -53,13 +70,26 @@ Alternatively, configure the gem in an initializer:
 ```ruby
 # config/initializers/feedback_gem.rb
 FeedbackGem.configure do |config|
+  # Required OAuth Configuration
+  config.oauth_url = ENV['TDX_OAUTH_URL']
+  config.api_base_url = ENV['TDX_API_BASE_URL']
   config.client_id = ENV['TDX_CLIENT_ID']
   config.client_secret = ENV['TDX_CLIENT_SECRET']
-  config.default_responsible_group_id = ENV['TDX_RESPONSIBLE_GROUP_ID'].to_i
 
-  # Optional configurations
-  config.app_id = ENV['TDX_APP_ID'].to_i if ENV['TDX_APP_ID']
-  config.default_service_id = ENV['TDX_SERVICE_ID'].to_i if ENV['TDX_SERVICE_ID']
+  # Required TDX Configuration
+  config.app_id = ENV['TDX_APP_ID'].to_i
+  config.account_id = ENV['TDX_ACCOUNT_ID'].to_i
+  config.service_offering_id = ENV['TDX_SERVICE_OFFERING_ID'].to_i
+
+  # Required Ticket Configuration
+  config.default_type_id = ENV['TDX_TYPE_ID'].to_i
+  config.default_form_id = ENV['TDX_FORM_ID'].to_i
+  config.default_classification = ENV['TDX_CLASSIFICATION']
+  config.default_status_id = ENV['TDX_STATUS_ID'].to_i
+  config.default_priority_id = ENV['TDX_PRIORITY_ID'].to_i
+  config.default_source_id = ENV['TDX_SOURCE_ID'].to_i
+  config.default_responsible_group_id = ENV['TDX_RESPONSIBLE_GROUP_ID'].to_i
+  config.default_service_id = ENV['TDX_SERVICE_ID'].to_i
 end
 ```
 

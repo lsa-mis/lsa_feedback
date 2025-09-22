@@ -47,7 +47,9 @@ module FeedbackGem
         RequestorEmail: feedback_data[:email],
         ResponsibleGroupID: @configuration.default_responsible_group_id,
         ServiceID: @configuration.default_service_id,
-        SourceID: @configuration.default_source_id
+        SourceID: @configuration.default_source_id,
+        ServiceOfferingID: @configuration.service_offering_id,
+        AccountID: @configuration.account_id
       }.compact
     end
 

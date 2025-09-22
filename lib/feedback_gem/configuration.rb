@@ -3,27 +3,26 @@ module FeedbackGem
     attr_accessor :client_id, :client_secret, :oauth_url, :api_base_url, :app_id,
                   :default_type_id, :default_form_id, :default_classification,
                   :default_status_id, :default_priority_id, :default_responsible_group_id,
-                  :default_service_id, :default_source_id, :cache_store, :cache_expiry
+                  :default_service_id, :default_source_id, :service_offering_id, :account_id,
+                  :cache_store, :cache_expiry
 
     def initialize
-      # TDX API Configuration - Based on the YAML documentation
-      @oauth_url = 'https://gw-test.api.it.umich.edu/um/oauth2'
-      @api_base_url = 'https://gw-test.api.it.umich.edu/um/it'
-
-      # Default TDX ticket values from API documentation
-      @default_type_id = 28 # TeamDynamix type from example
-      @default_form_id = 20 # Request Form from example
-      @default_classification = '46' # Request classification
-      @default_status_id = 77 # New status
-      @default_priority_id = 20 # Medium priority
-      @default_source_id = 8 # Systems source
-
-      # These should be configured by the application
+      # All values must be configured by the application for security
+      @oauth_url = nil
+      @api_base_url = nil
       @client_id = nil
       @client_secret = nil
-      @app_id = 31 # Default from examples
-      @default_responsible_group_id = nil # Must be set by application
-      @default_service_id = 67 # ITS-TeamDynamix Support from example
+      @app_id = nil
+      @default_type_id = nil
+      @default_form_id = nil
+      @default_classification = nil
+      @default_status_id = nil
+      @default_priority_id = nil
+      @default_source_id = nil
+      @default_responsible_group_id = nil
+      @default_service_id = nil
+      @service_offering_id = nil
+      @account_id = nil
 
       # Cache configuration
       @cache_store = :redis_cache_store
@@ -31,7 +30,7 @@ module FeedbackGem
     end
 
     def oauth_scope
-      'https://gw-test.api.it.umich.edu/um/it'
+      'https://gw-test.api.it.umich.edu/um/it tdxticket'
     end
 
     def grant_type
@@ -39,15 +38,39 @@ module FeedbackGem
     end
 
     def valid?
+      !oauth_url.nil? && !oauth_url.empty? &&
+      !api_base_url.nil? && !api_base_url.empty? &&
       !client_id.nil? && !client_id.empty? &&
       !client_secret.nil? && !client_secret.empty? &&
-      !default_responsible_group_id.nil?
+      !app_id.nil? &&
+      !default_type_id.nil? &&
+      !default_form_id.nil? &&
+      !default_classification.nil? && !default_classification.empty? &&
+      !default_status_id.nil? &&
+      !default_priority_id.nil? &&
+      !default_source_id.nil? &&
+      !default_responsible_group_id.nil? &&
+      !default_service_id.nil? &&
+      !service_offering_id.nil? &&
+      !account_id.nil?
     end
 
     def validate!
+      raise Error, 'oauth_url is required' unless oauth_url && !oauth_url.empty?
+      raise Error, 'api_base_url is required' unless api_base_url && !api_base_url.empty?
       raise Error, 'client_id is required' unless client_id && !client_id.empty?
       raise Error, 'client_secret is required' unless client_secret && !client_secret.empty?
+      raise Error, 'app_id is required' unless app_id
+      raise Error, 'default_type_id is required' unless default_type_id
+      raise Error, 'default_form_id is required' unless default_form_id
+      raise Error, 'default_classification is required' unless default_classification && !default_classification.empty?
+      raise Error, 'default_status_id is required' unless default_status_id
+      raise Error, 'default_priority_id is required' unless default_priority_id
+      raise Error, 'default_source_id is required' unless default_source_id
       raise Error, 'default_responsible_group_id is required' unless default_responsible_group_id
+      raise Error, 'default_service_id is required' unless default_service_id
+      raise Error, 'service_offering_id is required' unless service_offering_id
+      raise Error, 'account_id is required' unless account_id
     end
   end
 end
