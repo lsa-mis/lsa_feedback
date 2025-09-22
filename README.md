@@ -42,25 +42,25 @@ $ rails credentials:edit
 ```yaml
 feedback_gem:
   # Required OAuth Configuration
-  oauth_url: 'https://gw-test.api.it.umich.edu/um/oauth2'
-  api_base_url: 'https://gw-test.api.it.umich.edu/um/it'
+  oauth_url: 'https://your-tdx-instance.com/oauth2'
+  api_base_url: 'https://your-tdx-instance.com/api'
   client_id: your_tdx_client_id
   client_secret: your_tdx_client_secret
 
   # Required TDX Configuration
-  app_id: 46
-  account_id: 21
-  service_offering_id: 289
+  app_id: 123
+  account_id: 456
+  service_offering_id: 789
 
   # Required Ticket Configuration
-  default_type_id: 644
-  default_form_id: 107
-  default_classification: '46'
-  default_status_id: 115
-  default_priority_id: 20
-  default_source_id: 8
-  default_responsible_group_id: 388
-  default_service_id: 2314
+  default_type_id: 100
+  default_form_id: 200
+  default_classification: '300'
+  default_status_id: 400
+  default_priority_id: 500
+  default_source_id: 600
+  default_responsible_group_id: 700
+  default_service_id: 800
 ```
 
 ### Manual Configuration
