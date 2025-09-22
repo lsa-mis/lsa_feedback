@@ -1,9 +1,13 @@
 module FeedbackGem
   module ViewHelpers
+    # Simple test method to verify helper is working
+    def feedback_gem_test
+      "HELPER IS WORKING!".html_safe
+    end
+
     # Renders the feedback modal and trigger button
     def feedback_gem_modal
-      # Return the static HTML content directly
-      raw(<<~HTML)
+      html_content = <<~HTML
         <!-- FeedbackGem Modal -->
         <div id="feedback-gem-modal" class="feedback-gem-modal" style="display: none;">
           <div class="feedback-gem-modal-backdrop"></div>
@@ -60,8 +64,8 @@ module FeedbackGem
                 </div>
 
                 <!-- Hidden fields for context -->
-                <input type="hidden" name="url" value="#{request.original_url if respond_to?(:request)}">
-                <input type="hidden" name="user_agent" value="#{request.user_agent if respond_to?(:request)}">
+                <input type="hidden" name="url" value="">
+                <input type="hidden" name="user_agent" value="">
               </form>
             </div>
 
@@ -96,6 +100,8 @@ module FeedbackGem
           <span class="feedback-gem-trigger-text">Feedback</span>
         </button>
       HTML
+
+      html_content.html_safe
     end
 
     # Includes the feedback gem assets
@@ -114,7 +120,9 @@ module FeedbackGem
 
     # All-in-one helper that includes both modal and assets
     def feedback_gem
-      feedback_gem_assets + feedback_gem_modal
+      assets = feedback_gem_assets || ''
+      modal = feedback_gem_modal || ''
+      (assets + modal).html_safe
     end
   end
 end
