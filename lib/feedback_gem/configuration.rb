@@ -30,7 +30,7 @@ module FeedbackGem
     end
 
     def oauth_scope
-      'tdxticket'
+      'https://gw-test.api.it.umich.edu/um/it tdxticket'
     end
 
     def grant_type
