@@ -33,15 +33,16 @@
         </div>
 
         <div class="feedback-gem-form-group">
-          <label for="feedback-gem-email">Your Email</label>
+          <label for="feedback-gem-email">Your Email *</label>
           <input
             type="email"
             id="feedback-gem-email"
             name="email"
             placeholder="your.email@example.com"
-            value="<%= @feedback_gem_user_email if defined?(@feedback_gem_user_email) %>"
+            required
+            value="<%= @feedback_gem_user_email if defined?(@feedback_gem_user_email) && @feedback_gem_user_email.present? %>"
           >
-          <small class="feedback-gem-help-text">Optional - We'll only use this to follow up if needed</small>
+          <small class="feedback-gem-help-text">Required - We'll use this to follow up on your feedback</small>
         </div>
 
         <div class="feedback-gem-form-group">
