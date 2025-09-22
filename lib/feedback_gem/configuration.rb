@@ -72,5 +72,18 @@ module FeedbackGem
       raise Error, 'service_offering_id is required' unless service_offering_id
       raise Error, 'account_id is required' unless account_id
     end
+
+    def debug_info
+      {
+        oauth_url: oauth_url,
+        api_base_url: api_base_url,
+        client_id: client_id ? "#{client_id[0..4]}..." : nil,
+        client_secret: client_secret ? "#{client_secret[0..4]}..." : nil,
+        app_id: app_id,
+        grant_type: grant_type,
+        oauth_scope: oauth_scope,
+        valid: valid?
+      }
+    end
   end
 end
