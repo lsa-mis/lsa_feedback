@@ -37,7 +37,7 @@ Add your TDX configuration:
 ```yaml
 feedback_gem:
   # Required OAuth Configuration
-  oauth_url: 'https://your-tdx-instance.com/oauth2'
+  oauth_url: 'https://your-tdx-instance.com/oauth2'  # Note: Do NOT include /token
   api_base_url: 'https://your-tdx-instance.com/api'
   client_id: your_tdx_client_id_here
   client_secret: your_tdx_client_secret_here
@@ -187,6 +187,7 @@ end
 
 **3. OAuth/API errors**
 - Verify your TDX credentials are correct
+- **Ensure oauth_url does NOT include /token** (e.g., use `https://your-tdx.com/oauth2` not `https://your-tdx.com/oauth2/token`)
 - Check that your responsible group ID exists in TDX
 - Ensure your TDX instance URLs are correct (default is UMich test environment)
 

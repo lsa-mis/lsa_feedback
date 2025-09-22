@@ -42,7 +42,7 @@ $ rails credentials:edit
 ```yaml
 feedback_gem:
   # Required OAuth Configuration
-  oauth_url: 'https://your-tdx-instance.com/oauth2'
+  oauth_url: 'https://your-tdx-instance.com/oauth2'  # Note: Do NOT include /token
   api_base_url: 'https://your-tdx-instance.com/api'
   client_id: your_tdx_client_id
   client_secret: your_tdx_client_secret
@@ -71,7 +71,7 @@ If you prefer not to use Rails credentials, you can configure the gem manually i
 # config/initializers/feedback_gem.rb
 FeedbackGem.configure do |config|
   # Required OAuth Configuration
-  config.oauth_url = ENV['TDX_OAUTH_URL']
+  config.oauth_url = ENV['TDX_OAUTH_URL']  # Note: Do NOT include /token
   config.api_base_url = ENV['TDX_API_BASE_URL']
   config.client_id = ENV['TDX_CLIENT_ID']
   config.client_secret = ENV['TDX_CLIENT_SECRET']
@@ -299,6 +299,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 4. **OAuth/API errors**
    - Verify your TDX credentials are correct
    - Check that your TDX instance URLs are correct
+   - **Ensure oauth_url does NOT include /token** (e.g., use `https://your-tdx.com/oauth2` not `https://your-tdx.com/oauth2/token`)
    - Ensure your responsible group ID exists in TDX
 
 ### Debug Mode
