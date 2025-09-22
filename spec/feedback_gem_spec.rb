@@ -1,3 +1,6 @@
+require 'spec_helper'
+require 'feedback_gem'
+
 RSpec.describe FeedbackGem do
   it 'has a version number' do
     expect(FeedbackGem::VERSION).not_to be nil

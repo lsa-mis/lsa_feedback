@@ -39,13 +39,15 @@ module FeedbackGem
     end
 
     def valid?
-      client_id.present? && client_secret.present? && default_responsible_group_id.present?
+      !client_id.nil? && !client_id.empty? &&
+      !client_secret.nil? && !client_secret.empty? &&
+      !default_responsible_group_id.nil?
     end
 
     def validate!
-      raise Error, 'client_id is required' unless client_id.present?
-      raise Error, 'client_secret is required' unless client_secret.present?
-      raise Error, 'default_responsible_group_id is required' unless default_responsible_group_id.present?
+      raise Error, 'client_id is required' unless client_id && !client_id.empty?
+      raise Error, 'client_secret is required' unless client_secret && !client_secret.empty?
+      raise Error, 'default_responsible_group_id is required' unless default_responsible_group_id
     end
   end
 end

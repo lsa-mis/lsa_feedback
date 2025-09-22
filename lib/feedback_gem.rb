@@ -1,10 +1,14 @@
 require_relative 'feedback_gem/version'
-require_relative 'feedback_gem/engine'
 require_relative 'feedback_gem/configuration'
 require_relative 'feedback_gem/oauth_client'
 require_relative 'feedback_gem/ticket_client'
 require_relative 'feedback_gem/application_controller_extensions'
 require_relative 'feedback_gem/view_helpers'
+
+# Only require the engine when Rails is available
+if defined?(Rails)
+  require_relative 'feedback_gem/engine'
+end
 
 module FeedbackGem
   class Error < StandardError; end

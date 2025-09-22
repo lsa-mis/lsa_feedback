@@ -1,3 +1,6 @@
+require 'spec_helper'
+require 'feedback_gem'
+
 RSpec.describe FeedbackGem::Configuration do
   let(:config) { described_class.new }
 

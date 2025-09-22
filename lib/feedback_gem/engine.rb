@@ -1,12 +1,12 @@
-require 'rails/engine'
-
 module FeedbackGem
   class Engine < ::Rails::Engine
     isolate_namespace FeedbackGem
 
     # Automatically add assets to the asset pipeline
     initializer 'feedback_gem.assets.precompile' do |app|
-      app.config.assets.precompile += %w[feedback_gem.js feedback_gem.css]
+      if app.config.respond_to?(:assets)
+        app.config.assets.precompile += %w[feedback_gem.js feedback_gem.css]
+      end
     end
 
     # Add view paths for the feedback modal

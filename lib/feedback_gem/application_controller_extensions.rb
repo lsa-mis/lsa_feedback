@@ -1,9 +1,11 @@
 module FeedbackGem
   module ApplicationControllerExtensions
-    extend ActiveSupport::Concern
+    if defined?(ActiveSupport::Concern)
+      extend ActiveSupport::Concern
 
-    included do
-      before_action :set_feedback_gem_data
+      included do |base|
+        base.before_action :set_feedback_gem_data
+      end
     end
 
     private
