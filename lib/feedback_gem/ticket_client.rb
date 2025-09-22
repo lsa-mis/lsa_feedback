@@ -8,7 +8,7 @@ module FeedbackGem
       @configuration = configuration
       @configuration.validate!
       @oauth_client = OAuthClient.new(configuration)
-      
+
       self.class.base_uri(@configuration.api_base_url)
       self.class.headers({
         'Content-Type' => 'application/json',
@@ -18,7 +18,7 @@ module FeedbackGem
 
     def create_feedback_ticket(feedback_data)
       ticket_payload = build_ticket_payload(feedback_data)
-      
+
       response = self.class.post("/#{@configuration.app_id}/tickets",
         headers: {
           'Authorization' => "Bearer #{@oauth_client.get_access_token}"
@@ -53,34 +53,34 @@ module FeedbackGem
 
     def build_description(feedback_data)
       description_parts = []
-      
+
       description_parts << "<h3>User Feedback</h3>"
       description_parts << "<p><strong>Feedback:</strong></p>"
       description_parts << "<p>#{sanitize_html(feedback_data[:feedback])}</p>"
-      
+
       if feedback_data[:category].present?
         description_parts << "<p><strong>Category:</strong> #{sanitize_html(feedback_data[:category])}</p>"
       end
-      
+
       if feedback_data[:url].present?
         description_parts << "<p><strong>Page URL:</strong> #{sanitize_html(feedback_data[:url])}</p>"
       end
-      
+
       if feedback_data[:user_agent].present?
         description_parts << "<p><strong>Browser:</strong> #{sanitize_html(feedback_data[:user_agent])}</p>"
       end
-      
+
       if feedback_data[:additional_info].present?
         description_parts << "<p><strong>Additional Information:</strong></p>"
         description_parts << "<p>#{sanitize_html(feedback_data[:additional_info])}</p>"
       end
-      
+
       description_parts.join("\n")
     end
 
     def sanitize_html(text)
       return "" unless text
-      
+
       # Basic HTML escaping
       text.to_s
           .gsub('&', '&amp;')
@@ -98,7 +98,7 @@ module FeedbackGem
                      else
                        "TDX API Error: HTTP #{response.code} - #{response.message}"
                      end
-      
+
       raise Error, error_message
     end
   end

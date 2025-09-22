@@ -25,7 +25,7 @@ VCR.configure do |config|
   config.hook_into :webmock
   config.configure_rspec_metadata!
   config.default_cassette_options = { record: :once }
-  
+
   # Filter sensitive data
   config.filter_sensitive_data('<CLIENT_ID>') { ENV['TDX_CLIENT_ID'] }
   config.filter_sensitive_data('<CLIENT_SECRET>') { ENV['TDX_CLIENT_SECRET'] }

@@ -1,10 +1,10 @@
 module FeedbackGem
   class FeedbackController < ApplicationController
     protect_from_forgery with: :exception
-    
+
     def create
       ticket_client = TicketClient.new
-      
+
       feedback_data = {
         title: feedback_params[:title].presence || "User Feedback - #{feedback_params[:category]}",
         feedback: feedback_params[:feedback],
@@ -18,7 +18,7 @@ module FeedbackGem
 
       begin
         ticket_response = ticket_client.create_feedback_ticket(feedback_data)
-        
+
         render json: {
           success: true,
           message: "Thank you for your feedback! Your ticket has been created.",
@@ -26,14 +26,14 @@ module FeedbackGem
         }, status: :created
       rescue FeedbackGem::Error => e
         Rails.logger.error "FeedbackGem Error: #{e.message}"
-        
+
         render json: {
           success: false,
           message: "Sorry, there was an error submitting your feedback. Please try again later."
         }, status: :unprocessable_entity
       rescue StandardError => e
         Rails.logger.error "Unexpected error in FeedbackGem: #{e.message}\n#{e.backtrace.join("\n")}"
-        
+
         render json: {
           success: false,
           message: "Sorry, there was an unexpected error. Please try again later."

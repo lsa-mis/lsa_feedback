@@ -60,7 +60,7 @@ Then set your environment variables:
 
 ```bash
 export TDX_CLIENT_ID="your_client_id"
-export TDX_CLIENT_SECRET="your_client_secret"  
+export TDX_CLIENT_SECRET="your_client_secret"
 export TDX_RESPONSIBLE_GROUP_ID="123"
 ```
 
@@ -79,7 +79,7 @@ Add the feedback modal to your application layout:
 
   <body>
     <!-- Your existing body content -->
-    
+
     <!-- Add the feedback modal -->
     <%= feedback_gem_modal %>
   </body>
@@ -98,7 +98,7 @@ Or use the all-in-one helper:
 
   <body>
     <!-- Your existing body content -->
-    
+
     <!-- Add feedback gem (includes both assets and modal) -->
     <%= feedback_gem %>
   </body>
@@ -113,7 +113,7 @@ Override the user email detection in your ApplicationController:
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   private
-  
+
   def current_user_email_for_feedback
     current_user&.email # Adjust based on your user model
   end

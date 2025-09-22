@@ -56,7 +56,7 @@ FeedbackGem.configure do |config|
   config.client_id = ENV['TDX_CLIENT_ID']
   config.client_secret = ENV['TDX_CLIENT_SECRET']
   config.default_responsible_group_id = ENV['TDX_RESPONSIBLE_GROUP_ID'].to_i
-  
+
   # Optional configurations
   config.app_id = ENV['TDX_APP_ID'].to_i if ENV['TDX_APP_ID']
   config.default_service_id = ENV['TDX_SERVICE_ID'].to_i if ENV['TDX_SERVICE_ID']
@@ -95,7 +95,7 @@ By default, FeedbackGem tries to automatically detect the current user's email. 
 ```ruby
 class ApplicationController < ActionController::Base
   private
-  
+
   def current_user_email_for_feedback
     current_user&.email_address # or however you access user email
   end
@@ -131,7 +131,7 @@ You can override any of these in your configuration.
 The modal includes predefined categories that automatically set ticket priorities:
 
 - **Bug Report** → High Priority
-- **Urgent/Critical** → Emergency Priority  
+- **Urgent/Critical** → Emergency Priority
 - **Suggestion/Enhancement/Feature** → Low Priority
 - **General/Other** → Medium Priority (default)
 
@@ -181,9 +181,9 @@ $ bundle exec rubocop    # Run linter
 FeedbackGem.configure do |config|
   # Required
   config.client_id = "your_client_id"
-  config.client_secret = "your_client_secret"  
+  config.client_secret = "your_client_secret"
   config.default_responsible_group_id = 123
-  
+
   # Optional TDX settings
   config.oauth_url = "https://your-tdx-oauth-url"
   config.api_base_url = "https://your-tdx-api-url"
@@ -195,7 +195,7 @@ FeedbackGem.configure do |config|
   config.default_status_id = 77
   config.default_priority_id = 20
   config.default_source_id = 8
-  
+
   # Caching
   config.cache_store = :redis_cache_store
   config.cache_expiry = 3600  # Token cache expiry in seconds
@@ -205,7 +205,7 @@ end
 ### View Helpers
 
 - `feedback_gem` - Includes both assets and modal
-- `feedback_gem_assets` - Includes only CSS and JavaScript  
+- `feedback_gem_assets` - Includes only CSS and JavaScript
 - `feedback_gem_modal` - Includes only the modal HTML
 
 ## Contributing

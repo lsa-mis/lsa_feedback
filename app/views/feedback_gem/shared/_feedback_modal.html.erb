@@ -6,7 +6,7 @@
       <h2>Send Feedback</h2>
       <button type="button" class="feedback-gem-close-btn" aria-label="Close">&times;</button>
     </div>
-    
+
     <div class="feedback-gem-modal-body">
       <form id="feedback-gem-form">
         <div class="feedback-gem-form-group">
@@ -20,46 +20,46 @@
             <option value="other">Other</option>
           </select>
         </div>
-        
+
         <div class="feedback-gem-form-group">
           <label for="feedback-gem-feedback">Your Feedback *</label>
-          <textarea 
-            id="feedback-gem-feedback" 
-            name="feedback" 
-            required 
-            rows="5" 
+          <textarea
+            id="feedback-gem-feedback"
+            name="feedback"
+            required
+            rows="5"
             placeholder="Please describe your feedback in detail..."
           ></textarea>
         </div>
-        
+
         <div class="feedback-gem-form-group">
           <label for="feedback-gem-email">Your Email</label>
-          <input 
-            type="email" 
-            id="feedback-gem-email" 
-            name="email" 
+          <input
+            type="email"
+            id="feedback-gem-email"
+            name="email"
             placeholder="your.email@example.com"
             value="<%= @feedback_gem_user_email if defined?(@feedback_gem_user_email) %>"
           >
           <small class="feedback-gem-help-text">Optional - We'll only use this to follow up if needed</small>
         </div>
-        
+
         <div class="feedback-gem-form-group">
           <label for="feedback-gem-additional-info">Additional Information</label>
-          <textarea 
-            id="feedback-gem-additional-info" 
-            name="additional_info" 
-            rows="3" 
+          <textarea
+            id="feedback-gem-additional-info"
+            name="additional_info"
+            rows="3"
             placeholder="Any additional context or information..."
           ></textarea>
         </div>
-        
+
         <!-- Hidden fields for context -->
         <input type="hidden" name="url" value="<%= @feedback_gem_current_url if defined?(@feedback_gem_current_url) %>">
         <input type="hidden" name="user_agent" value="<%= @feedback_gem_user_agent if defined?(@feedback_gem_user_agent) %>">
       </form>
     </div>
-    
+
     <div class="feedback-gem-modal-footer">
       <button type="button" class="feedback-gem-btn feedback-gem-btn-secondary feedback-gem-cancel-btn">
         Cancel
@@ -75,7 +75,7 @@
         </span>
       </button>
     </div>
-    
+
     <!-- Success/Error Messages -->
     <div id="feedback-gem-message" class="feedback-gem-message" style="display: none;">
       <div class="feedback-gem-message-content"></div>

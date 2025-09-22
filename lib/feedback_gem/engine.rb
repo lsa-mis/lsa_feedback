@@ -35,12 +35,12 @@ module FeedbackGem
       if Rails.application.credentials.dig(:feedback_gem, :client_id) &&
          Rails.application.credentials.dig(:feedback_gem, :client_secret) &&
          Rails.application.credentials.dig(:feedback_gem, :responsible_group_id)
-        
+
         FeedbackGem.configure do |config|
           config.client_id = Rails.application.credentials.dig(:feedback_gem, :client_id)
           config.client_secret = Rails.application.credentials.dig(:feedback_gem, :client_secret)
           config.default_responsible_group_id = Rails.application.credentials.dig(:feedback_gem, :responsible_group_id)
-          
+
           # Optional overrides from credentials
           config.app_id = Rails.application.credentials.dig(:feedback_gem, :app_id) if Rails.application.credentials.dig(:feedback_gem, :app_id)
           config.default_service_id = Rails.application.credentials.dig(:feedback_gem, :service_id) if Rails.application.credentials.dig(:feedback_gem, :service_id)

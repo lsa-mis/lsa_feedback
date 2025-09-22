@@ -43,7 +43,7 @@
     padding: 10px 16px;
     font-size: 13px;
   }
-  
+
   .feedback-gem-trigger-text {
     display: none;
   }
@@ -261,17 +261,17 @@
     max-height: 96vh;
     width: 95%;
   }
-  
+
   .feedback-gem-modal-header,
   .feedback-gem-modal-body {
     padding: 20px;
   }
-  
+
   .feedback-gem-modal-footer {
     padding: 12px 20px 20px;
     flex-direction: column;
   }
-  
+
   .feedback-gem-btn {
     width: 100%;
     justify-content: center;
