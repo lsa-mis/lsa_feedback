@@ -45,7 +45,7 @@ module FeedbackGem
       !app_id.nil? &&
       !default_type_id.nil? &&
       !default_form_id.nil? &&
-      !default_classification.nil? && !default_classification.empty? &&
+      !default_classification.nil? && (default_classification.is_a?(String) ? !default_classification.empty? : true) &&
       !default_status_id.nil? &&
       !default_priority_id.nil? &&
       !default_source_id.nil? &&
@@ -63,7 +63,7 @@ module FeedbackGem
       raise Error, 'app_id is required' unless app_id
       raise Error, 'default_type_id is required' unless default_type_id
       raise Error, 'default_form_id is required' unless default_form_id
-      raise Error, 'default_classification is required' unless default_classification && !default_classification.empty?
+      raise Error, 'default_classification is required' unless default_classification && (default_classification.is_a?(String) ? !default_classification.empty? : true)
       raise Error, 'default_status_id is required' unless default_status_id
       raise Error, 'default_priority_id is required' unless default_priority_id
       raise Error, 'default_source_id is required' unless default_source_id
