@@ -9,8 +9,6 @@ module LsaTdxFeedback
       @configuration = configuration
       @configuration.validate!
 
-      Rails.logger.debug "LsaTdxFeedback: OAuth Client initialized with config: #{@configuration.debug_info}"
-
       self.class.base_uri(@configuration.oauth_url)
       self.class.headers({
         'Content-Type' => 'application/x-www-form-urlencoded',
@@ -46,11 +44,6 @@ module LsaTdxFeedback
     def fetch_new_token
       auth_header = Base64.strict_encode64("#{@configuration.client_id}:#{@configuration.client_secret}")
 
-      Rails.logger.debug "LsaTdxFeedback: Requesting OAuth token from #{@configuration.oauth_url}/token"
-      Rails.logger.debug "LsaTdxFeedback: Client ID: #{@configuration.client_id}"
-      Rails.logger.debug "LsaTdxFeedback: Grant type: #{@configuration.grant_type}"
-      Rails.logger.debug "LsaTdxFeedback: Scope: #{@configuration.oauth_scope}"
-
       response = self.class.post('/token',
         headers: {
           'Authorization' => "Basic #{auth_header}"
@@ -60,9 +53,6 @@ module LsaTdxFeedback
           scope: @configuration.oauth_scope
         }.to_query
       )
-
-      Rails.logger.debug "LsaTdxFeedback: OAuth response code: #{response.code}"
-      Rails.logger.debug "LsaTdxFeedback: OAuth response body: #{response.body}"
 
       response
     end

@@ -19,9 +19,6 @@ module LsaTdxFeedback
     def create_feedback_ticket(feedback_data)
       ticket_payload = build_ticket_payload(feedback_data)
 
-      Rails.logger.debug "Making API call to: #{self.class.base_uri}/#{@configuration.app_id}/tickets"
-      Rails.logger.debug "Payload: #{ticket_payload.to_json}"
-
       response = self.class.post("/#{@configuration.app_id}/tickets",
         headers: {
           'Authorization' => "Bearer #{@oauth_client.get_access_token}"
@@ -94,10 +91,6 @@ module LsaTdxFeedback
     end
 
     def handle_error_response(response)
-      Rails.logger.debug "Response Code: #{response.code}"
-      Rails.logger.debug "Response Headers: #{response.headers}"
-      Rails.logger.debug "Response Body: #{response.body}"
-
       error_data = response.parsed_response
       error_message = if error_data.is_a?(Hash) && error_data['errorMessage']
                        "TDX API Error: #{error_data['errorMessage']} (Code: #{error_data['errorCode']})"
