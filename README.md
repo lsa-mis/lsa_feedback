@@ -348,7 +348,7 @@ end
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/yourusername/lsa_tdx_feedback.
+Bug reports and pull requests are welcome on GitHub at https://github.com/lsa-mis/lsa_feedback.
 
 ## License
 
