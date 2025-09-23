@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    feedback_gem (0.1.0)
+    lsa_tdx_feedback (1.0.0)
       httparty (~> 0.22)
       rails (>= 6.0)
       redis (>= 4.0)
@@ -314,7 +314,7 @@ PLATFORMS
 
 DEPENDENCIES
   factory_bot_rails (~> 6.0)
-  feedback_gem!
+  lsa_tdx_feedback!
   rake (~> 13.0)
   rspec (~> 3.0)
   rspec-rails (~> 5.0)
