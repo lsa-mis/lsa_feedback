@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in feedback_gem.gemspec
+# Specify your gem's dependencies in lsa_tdx_feedback.gemspec
 gemspec
 
 gem 'rake', '~> 13.0'
