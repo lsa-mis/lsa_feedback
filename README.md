@@ -111,18 +111,61 @@ Rails.application.routes.draw do
 end
 ```
 
-### Step 2: Add the Feedback Modal
+### Step 2: Add the Feedback Modal and Assets (optimal placement)
 
-Add the feedback modal to your layout:
+For best performance and predictable ordering, include CSS in `<head>`, render the modal markup in the body, and place JS just before `</body>`:
 
 ```erb
-<!-- In your application layout (e.g., app/views/layouts/application.html.erb) -->
-<%= feedback_gem %>
+<!-- app/views/layouts/application.html.erb -->
+
+<head>
+  <%= feedback_gem_css %>
+  <!-- your other tags ... -->
+  ...
+  ...
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <!-- etc. -->
+  ...
+  ...
+  ...
+  ...
+</head>
+
+<body>
+  ...
+  <%= feedback_gem_modal %>
+  <%= feedback_gem_js %>
+</body>
 ```
 
-That's it! The feedback button will appear in the bottom-right corner of your application.
+This avoids FOUC (flash of unstyled content) and ensures the script loads after the DOM.
 
 ### Advanced Usage
+
+#### Performance vs convenience
+
+- **Optimal loading (recommended)**: Use the separate helpers so CSS loads in `<head>` and JS loads just before `</body>`. This avoids FOUC and keeps asset order predictable.
+- **Convenience**: Use `feedback_gem` (all‑in‑one) for quick setup. It injects CSS/JS plus the modal where it’s called, which can delay CSS and is less ideal for performance.
+
+#### Recommended placement (optimal)
+
+```erb
+<!-- app/views/layouts/application.html.erb -->
+
+<head>
+  <%= feedback_gem_css %>
+  <!-- your other tags ... -->
+  ...
+  ...
+</head>
+
+<body>
+  ...
+  <%= feedback_gem_modal %>
+  <%= feedback_gem_js %>
+</body>
+```
 
 You can also include components separately for more control over placement:
 
@@ -146,6 +189,40 @@ Or use the combined assets helper:
 <!-- Include just the modal (assets must be included separately) -->
 <%= feedback_gem_modal %>
 ```
+
+#### When to use explicit Rails asset tags
+
+If you prefer explicit control, you can use Rails helpers directly:
+
+```erb
+<head>
+  <%= stylesheet_link_tag 'feedback_gem', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
+
+<body>
+  ...
+  <%= feedback_gem_modal %>
+  <%= javascript_include_tag 'feedback_gem', defer: true, 'data-turbo-track': 'reload' %>
+</body>
+```
+
+Use explicit tags when you need to:
+
+- Set attributes like `defer`, `async`, `nonce` (CSP), `integrity`, `crossorigin`, `media`, or `preload`
+- Control exact ordering relative to Bootstrap or your packs
+- Swap delivery (CDN vs pipeline) or pin versions independently of the gem
+- Integrate precisely with your asset setup (Importmap, Propshaft, Sprockets, etc.)
+
+#### Convenience (all‑in‑one)
+
+If you want a single helper that injects CSS, JS, and the modal where it’s called (good for quick trials or prototypes):
+
+```erb
+<!-- In your application layout (e.g., app/views/layouts/application.html.erb) -->
+<%= feedback_gem %>
+```
+
+Note: This may load CSS later than ideal and is less optimal for performance.
 
 ### Customizing User Email
 
@@ -173,8 +250,8 @@ end
 
 The gem uses these default values based on University of Michigan's TDX setup:
 
-- **OAuth URL**: `https://gw-test.api.it.umich.edu/um/oauth2`
-- **API Base URL**: `https://gw-test.api.it.umich.edu/um/it`
+- **OAuth URL**: *see API documentation*
+- **API Base URL**: *see API documentation*
 - **Type ID**: 28 (TeamDynamix)
 - **Form ID**: 20 (Request Form)
 - **Classification**: "46" (Request)
