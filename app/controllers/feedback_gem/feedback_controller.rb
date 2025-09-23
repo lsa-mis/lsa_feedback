@@ -6,8 +6,15 @@ module FeedbackGem
     def create
       ticket_client = TicketClient.new
 
+      # Build the title and include the app name if available
+      title = feedback_params[:title].presence || "User Feedback - #{feedback_params[:category]}"
+
+      if defined?(@feedback_gem_app_name) && @feedback_gem_app_name.present?
+        title = "[#{@feedback_gem_app_name}]: #{title}"
+      end
+
       feedback_data = {
-        title: feedback_params[:title].presence || "User Feedback - #{feedback_params[:category]}",
+        title: title,
         feedback: feedback_params[:feedback],
         category: feedback_params[:category],
         email: feedback_params[:email],
