@@ -28,19 +28,19 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   # Runtime dependencies
-  spec.add_dependency 'rails', '>= 6.0'
   spec.add_dependency 'httparty', '~> 0.22'
+  spec.add_dependency 'rails', '>= 6.0'
   spec.add_dependency 'redis', '>= 4.0'
 
   # Development dependencies
+  spec.add_development_dependency 'factory_bot_rails', '~> 6.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rspec-rails', '~> 5.0'
-  spec.add_development_dependency 'factory_bot_rails', '~> 6.0'
-  spec.add_development_dependency 'webmock', '~> 3.0'
-  spec.add_development_dependency 'vcr', '~> 6.0'
   spec.add_development_dependency 'rubocop', '~> 1.21'
   spec.add_development_dependency 'rubocop-rails', '~> 2.0'
   spec.add_development_dependency 'rubocop-rspec', '~> 2.0'
+  spec.add_development_dependency 'vcr', '~> 6.0'
+  spec.add_development_dependency 'webmock', '~> 3.0'
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
