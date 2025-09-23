@@ -3,8 +3,8 @@ require_relative 'lib/feedback_gem/version'
 Gem::Specification.new do |spec|
   spec.name        = 'lsa_tdx_feedback'
   spec.version     = LsaTdxFeedback::VERSION
-  spec.authors     = ['LSA MIS Team']
-  spec.email       = ['LSA.TS.Web.and.Application.Development.Services.Managed@umich.edu']
+  spec.authors     = ['LSA Rails Team']
+  spec.email       = ['lsa-was-rails-admins@umich.edu']
   spec.homepage    = 'https://github.com/lsa-mis/lsa_feedback'
   spec.summary     = 'A self-contained Rails gem for collecting user feedback via TDX API for LSA applications'
   spec.description = 'LsaTdxFeedback provides a zero-configuration solution for collecting user feedback in Rails applications. It includes a modal interface that integrates with TeamDynamix (TDX) API for ticket creation, requiring no additional setup or configuration from the host application.'
