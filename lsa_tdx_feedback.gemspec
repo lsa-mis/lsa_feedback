@@ -10,9 +10,7 @@ Gem::Specification.new do |spec|
   spec.description = 'LsaTdxFeedback provides a zero-configuration solution for collecting user feedback in Rails applications. It includes a modal interface that integrates with TeamDynamix (TDX) API for ticket creation, requiring no additional setup or configuration from the host application.'
   spec.license     = 'MIT'
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+  # Allow pushing to RubyGems.org
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
