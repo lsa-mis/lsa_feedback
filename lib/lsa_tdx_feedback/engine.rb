@@ -1,41 +1,41 @@
-module FeedbackGem
+module LsaTdxFeedback
   class Engine < ::Rails::Engine
-    isolate_namespace FeedbackGem
+    isolate_namespace LsaTdxFeedback
 
     # Automatically add assets to the asset pipeline
-    initializer 'feedback_gem.assets.precompile' do |app|
+    initializer 'lsa_tdx_feedback.assets.precompile' do |app|
       if app.config.respond_to?(:assets)
-        app.config.assets.precompile += %w[feedback_gem.js feedback_gem.css]
+        app.config.assets.precompile += %w[lsa_tdx_feedback.js lsa_tdx_feedback.css]
       end
     end
 
     # Add view paths for the feedback modal
-    initializer 'feedback_gem.view_paths' do |app|
+    initializer 'lsa_tdx_feedback.view_paths' do |app|
       ActiveSupport.on_load :action_controller do
         append_view_path Engine.root.join('app', 'views')
       end
     end
 
     # Add helper methods to ApplicationController
-    initializer 'feedback_gem.action_controller' do
+    initializer 'lsa_tdx_feedback.action_controller' do
       ActiveSupport.on_load :action_controller do
-        include FeedbackGem::ApplicationControllerExtensions
+        include LsaTdxFeedback::ApplicationControllerExtensions
       end
     end
 
     # Add view helpers to ActionView
-    initializer 'feedback_gem.action_view' do
+    initializer 'lsa_tdx_feedback.action_view' do
       ActiveSupport.on_load :action_view do
-        include FeedbackGem::ViewHelpers
+        include LsaTdxFeedback::ViewHelpers
       end
     end
 
     # Auto-configure if credentials are available
     config.after_initialize do
-      credentials = Rails.application.credentials.feedback_gem
+      credentials = Rails.application.credentials.lsa_tdx_feedback
 
       if credentials&.dig(:client_id) && credentials&.dig(:client_secret) && credentials&.dig(:default_responsible_group_id)
-        FeedbackGem.configure do |config|
+        LsaTdxFeedback.configure do |config|
           # Load configuration from Rails credentials
 
           # Required OAuth Configuration

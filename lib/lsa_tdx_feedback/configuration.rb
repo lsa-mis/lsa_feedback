@@ -1,4 +1,4 @@
-module FeedbackGem
+module LsaTdxFeedback
   class Configuration
     attr_accessor :client_id, :client_secret, :oauth_url, :api_base_url, :app_id,
                   :default_type_id, :default_form_id, :default_classification,

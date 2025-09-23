@@ -1,6 +1,6 @@
-# FeedbackGem
+# LsaTdxFeedback
 
-A self-contained Rails gem for collecting user feedback via TeamDynamix (TDX) API. FeedbackGem provides a secure, configurable solution that integrates seamlessly with any Rails application.
+A self-contained Rails gem for collecting user feedback via TeamDynamix (TDX) API for LSA applications. LsaTdxFeedback provides a secure, configurable solution that integrates seamlessly with any Rails application.
 
 ## Features
 
@@ -18,7 +18,7 @@ A self-contained Rails gem for collecting user feedback via TeamDynamix (TDX) AP
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'feedback_gem'
+gem 'lsa_tdx_feedback'
 ```
 
 And then execute:
@@ -40,7 +40,7 @@ $ rails credentials:edit
 ```
 
 ```yaml
-feedback_gem:
+lsa_tdx_feedback:
   # Required OAuth Configuration
   oauth_url: 'https://your-tdx-instance.com/oauth2'  # Note: Do NOT include /token
   api_base_url: 'https://your-tdx-instance.com/api'
@@ -68,8 +68,8 @@ feedback_gem:
 If you prefer not to use Rails credentials, you can configure the gem manually in an initializer:
 
 ```ruby
-# config/initializers/feedback_gem.rb
-FeedbackGem.configure do |config|
+# config/initializers/lsa_tdx_feedback.rb
+LsaTdxFeedback.configure do |config|
   # Required OAuth Configuration
   config.oauth_url = ENV['TDX_OAUTH_URL']  # Note: Do NOT include /token
   config.api_base_url = ENV['TDX_API_BASE_URL']
@@ -107,7 +107,7 @@ Rails.application.routes.draw do
   # Your existing routes...
 
   # Mount the feedback gem engine
-  mount FeedbackGem::Engine => "/feedback_gem", as: "feedback_gem"
+  mount LsaTdxFeedback::Engine => "/lsa_tdx_feedback", as: "lsa_tdx_feedback"
 end
 ```
 
@@ -119,7 +119,7 @@ For best performance and predictable ordering, include CSS in `<head>`, render t
 <!-- app/views/layouts/application.html.erb -->
 
 <head>
-  <%= feedback_gem_css %>
+  <%= lsa_tdx_feedback_css %>
   <!-- your other tags ... -->
   ...
   ...
@@ -134,8 +134,8 @@ For best performance and predictable ordering, include CSS in `<head>`, render t
 
 <body>
   ...
-  <%= feedback_gem_modal %>
-  <%= feedback_gem_js %>
+  <%= lsa_tdx_feedback_modal %>
+  <%= lsa_tdx_feedback_js %>
 </body>
 ```
 
@@ -146,7 +146,7 @@ This avoids FOUC (flash of unstyled content) and ensures the script loads after 
 #### Performance vs convenience
 
 - **Optimal loading (recommended)**: Use the separate helpers so CSS loads in `<head>` and JS loads just before `</body>`. This avoids FOUC and keeps asset order predictable.
-- **Convenience**: Use `feedback_gem` (all‑in‑one) for quick setup. It injects CSS/JS plus the modal where it’s called, which can delay CSS and is less ideal for performance.
+- **Convenience**: Use `lsa_tdx_feedback` (all‑in‑one) for quick setup. It injects CSS/JS plus the modal where it’s called, which can delay CSS and is less ideal for performance.
 
 #### Recommended placement (optimal)
 
@@ -154,7 +154,7 @@ This avoids FOUC (flash of unstyled content) and ensures the script loads after 
 <!-- app/views/layouts/application.html.erb -->
 
 <head>
-  <%= feedback_gem_css %>
+  <%= lsa_tdx_feedback_css %>
   <!-- your other tags ... -->
   ...
   ...
@@ -162,8 +162,8 @@ This avoids FOUC (flash of unstyled content) and ensures the script loads after 
 
 <body>
   ...
-  <%= feedback_gem_modal %>
-  <%= feedback_gem_js %>
+  <%= lsa_tdx_feedback_modal %>
+  <%= lsa_tdx_feedback_js %>
 </body>
 ```
 
@@ -171,23 +171,23 @@ You can also include components separately for more control over placement:
 
 ```erb
 <!-- In your layout head section -->
-<%= feedback_gem_css %>
+<%= lsa_tdx_feedback_css %>
 
 <!-- In your layout body section (before closing </body> tag) -->
-<%= feedback_gem_js %>
+<%= lsa_tdx_feedback_js %>
 
 <!-- Include just the modal (assets must be included separately) -->
-<%= feedback_gem_modal %>
+<%= lsa_tdx_feedback_modal %>
 ```
 
 Or use the combined assets helper:
 
 ```erb
 <!-- Include both CSS and JavaScript together -->
-<%= feedback_gem_assets %>
+<%= lsa_tdx_feedback_assets %>
 
 <!-- Include just the modal (assets must be included separately) -->
-<%= feedback_gem_modal %>
+<%= lsa_tdx_feedback_modal %>
 ```
 
 #### When to use explicit Rails asset tags
@@ -196,13 +196,13 @@ If you prefer explicit control, you can use Rails helpers directly:
 
 ```erb
 <head>
-  <%= stylesheet_link_tag 'feedback_gem', media: 'all', 'data-turbo-track': 'reload' %>
+  <%= stylesheet_link_tag 'lsa_tdx_feedback', media: 'all', 'data-turbo-track': 'reload' %>
 </head>
 
 <body>
   ...
-  <%= feedback_gem_modal %>
-  <%= javascript_include_tag 'feedback_gem', defer: true, 'data-turbo-track': 'reload' %>
+  <%= lsa_tdx_feedback_modal %>
+  <%= javascript_include_tag 'lsa_tdx_feedback', defer: true, 'data-turbo-track': 'reload' %>
 </body>
 ```
 
@@ -219,14 +219,14 @@ If you want a single helper that injects CSS, JS, and the modal where it’s cal
 
 ```erb
 <!-- In your application layout (e.g., app/views/layouts/application.html.erb) -->
-<%= feedback_gem %>
+<%= lsa_tdx_feedback %>
 ```
 
 Note: This may load CSS later than ideal and is less optimal for performance.
 
 ### Customizing User Email
 
-By default, FeedbackGem tries to automatically detect the current user's email. You can customize this by overriding the `current_user_email_for_feedback` method in your ApplicationController:
+By default, LsaTdxFeedback tries to automatically detect the current user's email. You can customize this by overriding the `current_user_email_for_feedback` method in your ApplicationController:
 
 ```ruby
 class ApplicationController < ActionController::Base
@@ -314,7 +314,7 @@ $ bundle exec rubocop    # Run linter
 ### Configuration Options
 
 ```ruby
-FeedbackGem.configure do |config|
+LsaTdxFeedback.configure do |config|
   # Required
   config.client_id = "your_client_id"
   config.client_secret = "your_client_secret"
@@ -340,15 +340,15 @@ end
 
 ### View Helpers
 
-- `feedback_gem` - Includes both assets and modal (all-in-one)
-- `feedback_gem_assets` - Includes both CSS and JavaScript
-- `feedback_gem_css` - Includes only the CSS stylesheet
-- `feedback_gem_js` - Includes only the JavaScript file
-- `feedback_gem_modal` - Includes only the modal HTML
+- `lsa_tdx_feedback` - Includes both assets and modal (all-in-one)
+- `lsa_tdx_feedback_assets` - Includes both CSS and JavaScript
+- `lsa_tdx_feedback_css` - Includes only the CSS stylesheet
+- `lsa_tdx_feedback_js` - Includes only the JavaScript file
+- `lsa_tdx_feedback_modal` - Includes only the modal HTML
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/yourusername/feedback_gem.
+Bug reports and pull requests are welcome on GitHub at https://github.com/yourusername/lsa_tdx_feedback.
 
 ## License
 
@@ -363,14 +363,14 @@ The gem is available as open source under the terms of the [MIT License](https:/
    - Check that your Rails credentials are accessible
 
 2. **Modal doesn't appear or form submission fails**
-   - Ensure you've included `<%= feedback_gem %>` in your layout
+   - Ensure you've included `<%= lsa_tdx_feedback %>` in your layout
    - **Check that you've mounted the engine routes** in your `config/routes.rb`
    - Check browser console for JavaScript errors
-   - Verify the `/feedback_gem/feedback` endpoint is accessible
+   - Verify the `/lsa_tdx_feedback/feedback` endpoint is accessible
    - If using separate helpers, ensure CSS is in `<head>` and JS is before `</body>`
 
 3. **Styling conflicts**
-   - All FeedbackGem styles are prefixed with `feedback-gem-`
+   - All LsaTdxFeedback styles are prefixed with `feedback-gem-`
    - Use browser dev tools to check for CSS conflicts
 
 4. **OAuth/API errors**

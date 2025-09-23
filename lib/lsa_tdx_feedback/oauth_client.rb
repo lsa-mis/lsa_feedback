@@ -1,15 +1,15 @@
 require 'httparty'
 require 'base64'
 
-module FeedbackGem
+module LsaTdxFeedback
   class OAuthClient
     include HTTParty
 
-    def initialize(configuration = FeedbackGem.configuration)
+    def initialize(configuration = LsaTdxFeedback.configuration)
       @configuration = configuration
       @configuration.validate!
 
-      Rails.logger.debug "FeedbackGem: OAuth Client initialized with config: #{@configuration.debug_info}"
+      Rails.logger.debug "LsaTdxFeedback: OAuth Client initialized with config: #{@configuration.debug_info}"
 
       self.class.base_uri(@configuration.oauth_url)
       self.class.headers({
@@ -46,10 +46,10 @@ module FeedbackGem
     def fetch_new_token
       auth_header = Base64.strict_encode64("#{@configuration.client_id}:#{@configuration.client_secret}")
 
-      Rails.logger.debug "FeedbackGem: Requesting OAuth token from #{@configuration.oauth_url}/token"
-      Rails.logger.debug "FeedbackGem: Client ID: #{@configuration.client_id}"
-      Rails.logger.debug "FeedbackGem: Grant type: #{@configuration.grant_type}"
-      Rails.logger.debug "FeedbackGem: Scope: #{@configuration.oauth_scope}"
+      Rails.logger.debug "LsaTdxFeedback: Requesting OAuth token from #{@configuration.oauth_url}/token"
+      Rails.logger.debug "LsaTdxFeedback: Client ID: #{@configuration.client_id}"
+      Rails.logger.debug "LsaTdxFeedback: Grant type: #{@configuration.grant_type}"
+      Rails.logger.debug "LsaTdxFeedback: Scope: #{@configuration.oauth_scope}"
 
       response = self.class.post('/token',
         headers: {
@@ -61,8 +61,8 @@ module FeedbackGem
         }.to_query
       )
 
-      Rails.logger.debug "FeedbackGem: OAuth response code: #{response.code}"
-      Rails.logger.debug "FeedbackGem: OAuth response body: #{response.body}"
+      Rails.logger.debug "LsaTdxFeedback: OAuth response code: #{response.code}"
+      Rails.logger.debug "LsaTdxFeedback: OAuth response body: #{response.body}"
 
       response
     end
@@ -70,8 +70,8 @@ module FeedbackGem
     def handle_error_response(response)
       error_data = response.parsed_response
 
-      Rails.logger.error "FeedbackGem: OAuth Error - HTTP #{response.code}"
-      Rails.logger.error "FeedbackGem: OAuth Error Response: #{response.body}"
+      Rails.logger.error "LsaTdxFeedback: OAuth Error - HTTP #{response.code}"
+      Rails.logger.error "LsaTdxFeedback: OAuth Error Response: #{response.body}"
 
       error_message = if error_data.is_a?(Hash) && error_data['errorMessage']
                        "OAuth Error: #{error_data['errorMessage']} (Code: #{error_data['errorCode']})"
@@ -85,7 +85,7 @@ module FeedbackGem
     end
 
     def cache_key
-      "feedback_gem:oauth_token:#{Digest::MD5.hexdigest(@configuration.client_id)}"
+      "lsa_tdx_feedback:oauth_token:#{Digest::MD5.hexdigest(@configuration.client_id)}"
     end
   end
 end

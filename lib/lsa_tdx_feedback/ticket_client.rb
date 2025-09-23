@@ -1,10 +1,10 @@
 require 'httparty'
 
-module FeedbackGem
+module LsaTdxFeedback
   class TicketClient
     include HTTParty
 
-    def initialize(configuration = FeedbackGem.configuration)
+    def initialize(configuration = LsaTdxFeedback.configuration)
       @configuration = configuration
       @configuration.validate!
       @oauth_client = OAuthClient.new(configuration)

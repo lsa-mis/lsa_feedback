@@ -1,4 +1,4 @@
-require_relative 'lib/feedback_gem/version'
+require_relative 'lib/lsa_tdx_feedback/version'
 
 Gem::Specification.new do |spec|
   spec.name        = 'lsa_tdx_feedback'

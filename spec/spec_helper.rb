@@ -55,8 +55,8 @@ RSpec.configure do |config|
 
   # Reset configuration before each test
   config.before(:each) do
-    if defined?(FeedbackGem)
-      FeedbackGem.reset_configuration!
+    if defined?(LsaTdxFeedback)
+      LsaTdxFeedback.reset_configuration!
     end
   end
 end

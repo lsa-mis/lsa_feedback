@@ -1,6 +1,6 @@
 # Installation and Setup Guide
 
-This guide will walk you through setting up FeedbackGem in your Rails application.
+This guide will walk you through setting up LsaTdxFeedback in your Rails application.
 
 ## Prerequisites
 
@@ -10,10 +10,10 @@ This guide will walk you through setting up FeedbackGem in your Rails applicatio
 
 ## Step 1: Add the Gem
 
-Add FeedbackGem to your Gemfile:
+Add LsaTdxFeedback to your Gemfile:
 
 ```ruby
-gem 'feedback_gem'
+gem 'lsa_tdx_feedback'
 ```
 
 Run bundle install:
@@ -35,7 +35,7 @@ rails credentials:edit
 Add your TDX configuration:
 
 ```yaml
-feedback_gem:
+lsa_tdx_feedback:
   # Required OAuth Configuration
   oauth_url: 'https://your-tdx-instance.com/oauth2'  # Note: Do NOT include /token
   api_base_url: 'https://your-tdx-instance.com/api'
@@ -65,8 +65,8 @@ feedback_gem:
 Create an initializer file:
 
 ```ruby
-# config/initializers/feedback_gem.rb
-FeedbackGem.configure do |config|
+# config/initializers/lsa_tdx_feedback.rb
+LsaTdxFeedback.configure do |config|
   config.client_id = ENV['TDX_CLIENT_ID']
   config.client_secret = ENV['TDX_CLIENT_SECRET']
   config.default_responsible_group_id = ENV['TDX_RESPONSIBLE_GROUP_ID'].to_i
@@ -91,7 +91,7 @@ Rails.application.routes.draw do
   # Your existing routes...
 
   # Mount the feedback gem engine
-  mount FeedbackGem::Engine => "/feedback_gem", as: "feedback_gem"
+  mount LsaTdxFeedback::Engine => "/lsa_tdx_feedback", as: "lsa_tdx_feedback"
 end
 ```
 
@@ -105,17 +105,17 @@ Add the feedback modal to your application layout:
 <html>
   <head>
     <!-- Your existing head content -->
-    <%= feedback_gem_css %>
+    <%= lsa_tdx_feedback_css %>
   </head>
 
   <body>
     <!-- Your existing body content -->
 
     <!-- Add the feedback modal -->
-    <%= feedback_gem_modal %>
+    <%= lsa_tdx_feedback_modal %>
 
     <!-- Add the JavaScript before closing body tag -->
-    <%= feedback_gem_js %>
+    <%= lsa_tdx_feedback_js %>
   </body>
 </html>
 ```
@@ -134,7 +134,7 @@ Or use the all-in-one helper:
     <!-- Your existing body content -->
 
     <!-- Add feedback gem (includes both assets and modal) -->
-    <%= feedback_gem %>
+    <%= lsa_tdx_feedback %>
   </body>
 </html>
 ```
@@ -178,7 +178,7 @@ end
 - **Verify you've mounted the engine routes** in your `config/routes.rb`
 - Check browser console for JavaScript errors
 - Ensure CSS is loading properly
-- Verify the `/feedback_gem/feedback` endpoint is accessible
+- Verify the `/lsa_tdx_feedback/feedback` endpoint is accessible
 
 **2. "client_id is required" error**
 - Verify your credentials are configured correctly
@@ -192,7 +192,7 @@ end
 - Ensure your TDX instance URLs are correct (default is UMich test environment)
 
 **4. Styling conflicts**
-- All FeedbackGem styles are prefixed with `feedback-gem-`
+- All LsaTdxFeedback styles are prefixed with `feedback-gem-`
 - Use browser dev tools to identify conflicts
 - Override styles in your application CSS if needed
 
@@ -214,7 +214,7 @@ This will log OAuth requests and API calls for troubleshooting.
 If you're using a different TDX instance than University of Michigan:
 
 ```ruby
-FeedbackGem.configure do |config|
+LsaTdxFeedback.configure do |config|
   config.oauth_url = "https://your-tdx-oauth-url"
   config.api_base_url = "https://your-tdx-api-url"
   # ... other config
@@ -226,7 +226,7 @@ end
 Override default ticket values:
 
 ```ruby
-FeedbackGem.configure do |config|
+LsaTdxFeedback.configure do |config|
   config.default_type_id = 28
   config.default_priority_id = 20
   config.default_status_id = 77

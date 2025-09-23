@@ -1,15 +1,15 @@
 /**
- * FeedbackGem JavaScript - Self-contained feedback modal functionality
+ * LsaTdxFeedback JavaScript - Self-contained feedback modal functionality
  */
 (function() {
   'use strict';
 
   // Ensure we don't initialize multiple times
-  if (window.FeedbackGem && window.FeedbackGem.initialized) {
+  if (window.LsaTdxFeedback && window.LsaTdxFeedback.initialized) {
     return;
   }
 
-  var FeedbackGem = {
+  var LsaTdxFeedback = {
     initialized: false,
     modal: null,
     form: null,
@@ -31,16 +31,16 @@
       var self = this;
 
       // Get modal and form elements
-      this.modal = document.getElementById('feedback-gem-modal');
-      this.form = document.getElementById('feedback-gem-form');
+      this.modal = document.getElementById('lsa-tdx-feedback-modal');
+      this.form = document.getElementById('lsa-tdx-feedback-form');
 
       if (!this.modal || !this.form) {
-        console.warn('FeedbackGem: Modal or form not found. Make sure to include the feedback modal partial.');
+        console.warn('LsaTdxFeedback: Modal or form not found. Make sure to include the feedback modal partial.');
         return;
       }
 
       // Trigger button
-      var triggerBtn = document.getElementById('feedback-gem-trigger');
+      var triggerBtn = document.getElementById('lsa-tdx-feedback-trigger');
       if (triggerBtn) {
         triggerBtn.addEventListener('click', function(e) {
           e.preventDefault();
@@ -49,9 +49,9 @@
       }
 
       // Close buttons
-      var closeBtn = this.modal.querySelector('.feedback-gem-close-btn');
-      var cancelBtn = this.modal.querySelector('.feedback-gem-cancel-btn');
-      var backdrop = this.modal.querySelector('.feedback-gem-modal-backdrop');
+      var closeBtn = this.modal.querySelector('.lsa-tdx-feedback-close-btn');
+      var cancelBtn = this.modal.querySelector('.lsa-tdx-feedback-cancel-btn');
+      var backdrop = this.modal.querySelector('.lsa-tdx-feedback-modal-backdrop');
 
       if (closeBtn) {
         closeBtn.addEventListener('click', function(e) {
@@ -152,7 +152,7 @@
       };
 
       // Submit via fetch
-      fetch('/feedback_gem/feedback', {
+      fetch('/lsa_tdx_feedback/feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -179,16 +179,16 @@
         }
       })
       .catch(function(error) {
-        console.error('FeedbackGem submission error:', error);
+        console.error('LsaTdxFeedback submission error:', error);
         self.setSubmitButtonState(false);
         self.showMessage('There was an error submitting your feedback. Please try again.', 'error');
       });
     },
 
     setSubmitButtonState: function(loading) {
-      var submitBtn = this.modal.querySelector('.feedback-gem-submit-btn');
-      var btnText = submitBtn.querySelector('.feedback-gem-btn-text');
-      var spinner = submitBtn.querySelector('.feedback-gem-loading-spinner');
+      var submitBtn = this.modal.querySelector('.lsa-tdx-feedback-submit-btn');
+      var btnText = submitBtn.querySelector('.lsa-tdx-feedback-btn-text');
+      var spinner = submitBtn.querySelector('.lsa-tdx-feedback-loading-spinner');
 
       if (loading) {
         submitBtn.disabled = true;
@@ -202,16 +202,16 @@
     },
 
     showMessage: function(message, type) {
-      var messageEl = document.getElementById('feedback-gem-message');
-      var contentEl = messageEl.querySelector('.feedback-gem-message-content');
+      var messageEl = document.getElementById('lsa-tdx-feedback-message');
+      var contentEl = messageEl.querySelector('.lsa-tdx-feedback-message-content');
 
       contentEl.textContent = message;
-      messageEl.className = 'feedback-gem-message ' + (type || 'info');
+      messageEl.className = 'lsa-tdx-feedback-message ' + (type || 'info');
       messageEl.style.display = 'block';
     },
 
     hideMessage: function() {
-      var messageEl = document.getElementById('feedback-gem-message');
+      var messageEl = document.getElementById('lsa-tdx-feedback-message');
       if (messageEl) {
         messageEl.style.display = 'none';
       }
@@ -224,8 +224,8 @@
   };
 
   // Export to global scope
-  window.FeedbackGem = FeedbackGem;
+  window.LsaTdxFeedback = LsaTdxFeedback;
 
   // Auto-initialize
-  FeedbackGem.init();
+  LsaTdxFeedback.init();
 })();

@@ -1,0 +1,95 @@
+<!-- LsaTdxFeedback Modal -->
+<div id="lsa-tdx-feedback-modal" class="lsa-tdx-feedback-modal" style="display: none;">
+  <div class="lsa-tdx-feedback-modal-backdrop"></div>
+  <div class="lsa-tdx-feedback-modal-content">
+    <div class="lsa-tdx-feedback-modal-header">
+      <h2>
+        <%= "[#{@lsa_tdx_feedback_app_name}]: " if defined?(@lsa_tdx_feedback_app_name) && @lsa_tdx_feedback_app_name.present? %>Send Feedback
+      </h2>
+      <button type="button" class="lsa-tdx-feedback-close-btn" aria-label="Close">&times;</button>
+    </div>
+
+    <div class="lsa-tdx-feedback-modal-body">
+      <form id="lsa-tdx-feedback-form">
+        <div class="lsa-tdx-feedback-form-group">
+          <label for="lsa-tdx-feedback-category">Category</label>
+          <select id="lsa-tdx-feedback-category" name="category" required>
+            <option value="">Select a category</option>
+            <option value="bug">Bug Report</option>
+            <option value="suggestion">Suggestion</option>
+            <option value="feature">Feature Request</option>
+            <option value="general">General Feedback</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="lsa-tdx-feedback-form-group">
+          <label for="lsa-tdx-feedback-feedback">Your Feedback *</label>
+          <textarea
+            id="lsa-tdx-feedback-feedback"
+            name="feedback"
+            required
+            rows="5"
+            placeholder="Please describe your feedback in detail..."
+          ></textarea>
+        </div>
+
+        <div class="lsa-tdx-feedback-form-group">
+          <label for="lsa-tdx-feedback-email">Your Email *</label>
+          <input
+            type="email"
+            id="lsa-tdx-feedback-email"
+            name="email"
+            placeholder="your.email@example.com"
+            required
+            value="<%= @lsa_tdx_feedback_user_email if defined?(@lsa_tdx_feedback_user_email) && @lsa_tdx_feedback_user_email.present? %>"
+          >
+          <small class="lsa-tdx-feedback-help-text">Required - We'll use this to follow up on your feedback</small>
+        </div>
+
+        <div class="lsa-tdx-feedback-form-group">
+          <label for="lsa-tdx-feedback-additional-info">Additional Information</label>
+          <textarea
+            id="lsa-tdx-feedback-additional-info"
+            name="additional_info"
+            rows="3"
+            placeholder="Any additional context or information..."
+          ></textarea>
+        </div>
+
+        <!-- Hidden fields for context -->
+        <input type="hidden" name="url" value="<%= @lsa_tdx_feedback_current_url if defined?(@lsa_tdx_feedback_current_url) %>">
+        <input type="hidden" name="user_agent" value="<%= @lsa_tdx_feedback_user_agent if defined?(@lsa_tdx_feedback_user_agent) %>">
+      </form>
+    </div>
+
+    <div class="lsa-tdx-feedback-modal-footer">
+      <button type="button" class="lsa-tdx-feedback-btn lsa-tdx-feedback-btn-secondary lsa-tdx-feedback-cancel-btn">
+        Cancel
+      </button>
+      <button type="submit" form="lsa-tdx-feedback-form" class="lsa-tdx-feedback-btn lsa-tdx-feedback-btn-primary lsa-tdx-feedback-submit-btn">
+        <span class="lsa-tdx-feedback-btn-text">Send Feedback</span>
+        <span class="lsa-tdx-feedback-loading-spinner" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity="0.25"/>
+            <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"/>
+          </svg>
+          Sending...
+        </span>
+      </button>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="lsa-tdx-feedback-message" class="lsa-tdx-feedback-message" style="display: none;">
+      <div class="lsa-tdx-feedback-message-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Button -->
+<button id="lsa-tdx-feedback-trigger" class="lsa-tdx-feedback-trigger-btn" title="Send Feedback">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+  </svg>
+  <span class="lsa-tdx-feedback-trigger-text">Feedback</span>
+</button>
