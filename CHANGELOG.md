@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **TDX API Integration Issues**: Resolved HTTP 422 errors when creating tickets
-  - Fixed invalid Classification value (changed from 300 to 46)
+  - Fixed invalid Classification value 
   - Updated configuration validation to handle both string and integer values for `default_classification`
   - Simplified ticket payload structure to include only essential fields
   - Fixed string interpolation in `build_description` method
