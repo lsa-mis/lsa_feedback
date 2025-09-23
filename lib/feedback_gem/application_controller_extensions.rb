@@ -13,6 +13,16 @@ module FeedbackGem
     def set_feedback_gem_data
       @feedback_gem_current_url = request.original_url
       @feedback_gem_user_agent = request.user_agent
+      @feedback_gem_app_name = begin
+        # Prefer Rails 6+ API, fallback for older Rails
+        if Rails.application.class.respond_to?(:module_parent_name)
+          Rails.application.class.module_parent_name
+        else
+          Rails.application.class.parent_name
+        end
+      rescue
+        nil
+      end
 
       # Logging
       Rails.logger.info "set_feedback_gem_data called"
