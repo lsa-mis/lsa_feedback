@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.1] - 2024-12-19
+## [1.0.1] - 2025-09-23
 
 ### Fixed
 - **TDX API Integration Issues**: Resolved HTTP 422 errors when creating tickets
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - ResponsibleGroupID, AccountID
 - Improved error handling and debugging capabilities
 
-## [1.0.0] - 2024-01-XX
+## [1.0.0] - 2025-09-23
 
 ### Added
 - Initial release of FeedbackGem
