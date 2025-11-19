@@ -302,6 +302,34 @@ end
 
 This makes `current_user` available in all controllers and views, including Rails internals like ActionController::Base.
 
+### Step 3A: Create an initializer (config/initializers/lsa_tdx_feedback.rb) that skips authentication for the feedback controller, since feedback forms should be public
+
+```ruby
+# Configure lsa_tdx_feedback gem to allow unauthenticated access
+# Feedback forms should be accessible without authentication
+Rails.application.config.to_prepare do
+  if defined?(LsaTdxFeedback::FeedbackController)
+    LsaTdxFeedback::FeedbackController.class_eval do
+      # Skip authentication for feedback submissions
+      # Use raise: false to prevent errors if the before_action doesn't exist
+      skip_before_action :require_authentication, raise: false
+    end
+  end
+rescue => e
+  Rails.logger.warn("Could not configure LsaTdxFeedback: #{e.message}") if defined?(Rails.logger)
+end
+```
+
+and update request_authentication in the Authentication concern ( app/controllers/concerns/authentication.rb ) to use main_app.new_session_path so it works when called from engine controllers.
+
+```ruby
+# Update request_authentication in the Authentication concern to use main_app.new_session_path so it works when called from engine controllers.
+...
+      redirect_to main_app.new_session_path # around line 34 in the Authentication concern
+...
+```
+
+
 ### Step 4: Protect Actions (Optional)
 
 To require authentication for specific actions:
