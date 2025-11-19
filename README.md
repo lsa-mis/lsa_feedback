@@ -238,6 +238,129 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+## Rails 8 Authentication Setup
+
+If you're using Rails 8.1.1's built-in authentication system, here's how to set it up and create a `current_user` helper method similar to Devise.
+
+### Step 1: Generate the Authentication System
+
+Run the Rails generator:
+
+```bash
+bin/rails generate authentication
+```
+
+This creates:
+
+- User model
+- Session model
+- Current class (for per-request attributes)
+- Controllers (SessionsController, PasswordsController)
+- Views for login/password reset
+- Migrations
+
+### Step 2: Run Migrations
+
+```bash
+bin/rails db:migrate
+```
+
+### Step 3: Add current_user Helper Method
+
+Rails 8 uses `Current.user` instead of `current_user`. Add this to your `ApplicationController` to match Devise's pattern:
+
+```ruby
+class ApplicationController < ActionController::Base
+  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  allow_browser versions: :modern
+
+  helper_method :current_user
+
+  private
+
+  def current_user
+    Current.user
+  end
+end
+```
+
+The `helper_method :current_user` makes it available in views and controllers.
+
+### Step 4: Protect Actions (Optional)
+
+To require authentication for specific actions:
+
+```ruby
+class SomeController < ApplicationController
+  before_action :require_authentication
+
+  private
+
+  def require_authentication
+    redirect_to new_session_path unless current_user
+  end
+end
+```
+
+### Excluding Authentication for Specific Controllers
+
+If you need to exclude authentication for specific controllers or actions (e.g., a public home page), use the `allow_unauthenticated_access` method provided by the Authentication concern:
+
+```ruby
+class HomeController < ApplicationController
+  allow_unauthenticated_access only: [:index]
+
+  def index
+  end
+end
+```
+
+This skips authentication only for the `index` action. The Authentication concern uses `skip_before_action :require_authentication` under the hood.
+
+**Alternative options:**
+
+If you want to skip authentication for all actions in the HomeController:
+
+```ruby
+class HomeController < ApplicationController
+  allow_unauthenticated_access
+
+  def index
+  end
+end
+```
+
+Or if you want to skip for multiple specific actions:
+
+```ruby
+class HomeController < ApplicationController
+  allow_unauthenticated_access only: [:index, :show]
+
+  def index
+  end
+end
+```
+
+The `only:` option limits it to specific actions, while omitting it skips authentication for all actions in that controller.
+
+### How It Works
+
+- `Current` is an `ActiveSupport::CurrentAttributes` class that stores per-request attributes
+- After login, `Current.user` is set to the authenticated user
+- `current_user` wraps `Current.user` for Devise-like usage
+- Works with authorization libraries like Pundit that expect `current_user`
+
+### Routes
+
+The generator adds routes like:
+
+- `new_session_path` - login page
+- `session_path` - create/destroy session
+- `new_password_path` - password reset request
+- etc.
+
+After running the generator, you can use `current_user` in controllers and views just like with Devise.
+
 ## TDX API Configuration
 
 ### Required TDX Settings

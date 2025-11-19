@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Documentation**: Added Rails 8 authentication setup instructions to README
+  - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
+  - Instructions for creating `current_user` helper method to match Devise pattern
+  - Examples for protecting actions and excluding authentication for specific controllers
+  - Documentation on using `allow_unauthenticated_access` for public pages
+
 ## [1.0.2] - 2025-01-27
 
 ### Fixed
@@ -16,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **TDX API Integration Issues**: Resolved HTTP 422 errors when creating tickets
-  - Fixed invalid Classification value 
+  - Fixed invalid Classification value
   - Updated configuration validation to handle both string and integer values for `default_classification`
   - Simplified ticket payload structure to include only essential fields
   - Fixed string interpolation in `build_description` method
