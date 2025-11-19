@@ -265,26 +265,42 @@ This creates:
 bin/rails db:migrate
 ```
 
-### Step 3: Add current_user Helper Method
-
-Rails 8 uses `Current.user` instead of `current_user`. Add this to your `ApplicationController` to match Devise's pattern:
+### Step 3: Add current_user initializer for Rails 8 internal controllers
+Creating an initializer to make current_user available to all controllers, including Rails internals:
 
 ```ruby
-class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
-
+# config/initializers/current_user.rb
+# Make current_user available to all controllers, including Rails internal controllers
+# This is needed for gems like lsa_tdx_feedback that call current_user on all controllers
+ActionController::Base.class_eval do
   helper_method :current_user
 
   private
 
   def current_user
-    Current.user
+    # Use Current.user if available (set by ApplicationController)
+    return Current.user if Current.user
+
+    # For controllers that don't inherit from ApplicationController,
+    # try to find the session manually
+    return nil unless respond_to?(:cookies, true)
+
+    begin
+      session_id = cookies.signed[:session_id] if cookies.signed
+      return nil unless session_id
+
+      session = Session.find_by(id: session_id)
+      session&.user
+    rescue => e
+      # If anything goes wrong (e.g., database not available), return nil
+      Rails.logger.debug("Error in current_user: #{e.message}") if defined?(Rails.logger)
+      nil
+    end
   end
 end
 ```
 
-The `helper_method :current_user` makes it available in views and controllers.
+This makes `current_user` available in all controllers and views, including Rails internals like ActionController::Base.
 
 ### Step 4: Protect Actions (Optional)
 
