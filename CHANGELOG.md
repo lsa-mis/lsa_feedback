@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Documentation**: Added Rails 8 authentication setup instructions to README
+  - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
+  - Instructions for creating `current_user` helper method to match Devise pattern
+  - Examples for protecting actions and excluding authentication for specific controllers
+  - Documentation on using `allow_unauthenticated_access` for public pages
+
+## [1.0.3] - 2025-12-08
+
 ### Fixed
 - **Turbo Drive Compatibility**: Fixed feedback button not working after Turbo navigation
   - Added proper event listener cleanup to prevent duplicate handlers
@@ -14,13 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Re-initializes feedback functionality on each Turbo navigation
   - Prevents memory leaks by properly removing old event listeners before attaching new ones
   - Maintains backward compatibility with traditional page loads
-
-### Added
-- **Documentation**: Added Rails 8 authentication setup instructions to README
-  - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
-  - Instructions for creating `current_user` helper method to match Devise pattern
-  - Examples for protecting actions and excluding authentication for specific controllers
-  - Documentation on using `allow_unauthenticated_access` for public pages
 
 ## [1.0.2] - 2025-01-27
 
