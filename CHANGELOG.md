@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Turbo Drive Compatibility**: Fixed feedback button not working after Turbo navigation
+  - Added proper event listener cleanup to prevent duplicate handlers
+  - Added support for `turbo:load` and `turbo:frame-load` events
+  - Re-initializes feedback functionality on each Turbo navigation
+  - Prevents memory leaks by properly removing old event listeners before attaching new ones
+  - Maintains backward compatibility with traditional page loads
+
 ### Added
 - **Documentation**: Added Rails 8 authentication setup instructions to README
   - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
