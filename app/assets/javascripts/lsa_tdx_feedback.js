@@ -1,21 +1,33 @@
 /**
  * LsaTdxFeedback JavaScript - Self-contained feedback modal functionality
+ * Turbo Drive compatible
  */
 (function() {
   'use strict';
-
-  // Ensure we don't initialize multiple times
-  if (window.LsaTdxFeedback && window.LsaTdxFeedback.initialized) {
-    return;
-  }
 
   var LsaTdxFeedback = {
     initialized: false,
     modal: null,
     form: null,
+    handlers: {
+      triggerClick: null,
+      closeClick: null,
+      cancelClick: null,
+      backdropClick: null,
+      formSubmit: null,
+      escapeKey: null
+    },
 
     init: function() {
-      if (this.initialized) return;
+      // Clean up existing listeners if already initialized (for Turbo navigation)
+      if (this.initialized) {
+        this.cleanup();
+      }
+
+      // Reset state for re-initialization
+      this.initialized = false;
+      this.modal = null;
+      this.form = null;
 
       // Wait for DOM to be ready
       if (document.readyState === 'loading') {
@@ -25,6 +37,52 @@
 
       this.bindEvents();
       this.initialized = true;
+    },
+
+    cleanup: function() {
+      // Remove all event listeners before re-initializing
+      var self = this;
+
+      if (this.handlers.triggerClick) {
+        var triggerBtn = document.getElementById('lsa-tdx-feedback-trigger');
+        if (triggerBtn) {
+          triggerBtn.removeEventListener('click', this.handlers.triggerClick);
+        }
+      }
+
+      if (this.modal) {
+        var closeBtn = this.modal.querySelector('.lsa-tdx-feedback-close-btn');
+        var cancelBtn = this.modal.querySelector('.lsa-tdx-feedback-cancel-btn');
+        var backdrop = this.modal.querySelector('.lsa-tdx-feedback-modal-backdrop');
+
+        if (closeBtn && this.handlers.closeClick) {
+          closeBtn.removeEventListener('click', this.handlers.closeClick);
+        }
+        if (cancelBtn && this.handlers.cancelClick) {
+          cancelBtn.removeEventListener('click', this.handlers.cancelClick);
+        }
+        if (backdrop && this.handlers.backdropClick) {
+          backdrop.removeEventListener('click', this.handlers.backdropClick);
+        }
+      }
+
+      if (this.form && this.handlers.formSubmit) {
+        this.form.removeEventListener('submit', this.handlers.formSubmit);
+      }
+
+      if (this.handlers.escapeKey) {
+        document.removeEventListener('keydown', this.handlers.escapeKey);
+      }
+
+      // Clear handler references
+      this.handlers = {
+        triggerClick: null,
+        closeClick: null,
+        cancelClick: null,
+        backdropClick: null,
+        formSubmit: null,
+        escapeKey: null
+      };
     },
 
     bindEvents: function() {
@@ -42,10 +100,11 @@
       // Trigger button
       var triggerBtn = document.getElementById('lsa-tdx-feedback-trigger');
       if (triggerBtn) {
-        triggerBtn.addEventListener('click', function(e) {
+        this.handlers.triggerClick = function(e) {
           e.preventDefault();
           self.showModal();
-        });
+        };
+        triggerBtn.addEventListener('click', this.handlers.triggerClick);
       }
 
       // Close buttons
@@ -54,39 +113,44 @@
       var backdrop = this.modal.querySelector('.lsa-tdx-feedback-modal-backdrop');
 
       if (closeBtn) {
-        closeBtn.addEventListener('click', function(e) {
+        this.handlers.closeClick = function(e) {
           e.preventDefault();
           self.hideModal();
-        });
+        };
+        closeBtn.addEventListener('click', this.handlers.closeClick);
       }
 
       if (cancelBtn) {
-        cancelBtn.addEventListener('click', function(e) {
+        this.handlers.cancelClick = function(e) {
           e.preventDefault();
           self.hideModal();
-        });
+        };
+        cancelBtn.addEventListener('click', this.handlers.cancelClick);
       }
 
       if (backdrop) {
-        backdrop.addEventListener('click', function(e) {
+        this.handlers.backdropClick = function(e) {
           if (e.target === backdrop) {
             self.hideModal();
           }
-        });
+        };
+        backdrop.addEventListener('click', this.handlers.backdropClick);
       }
 
       // Form submission
-      this.form.addEventListener('submit', function(e) {
+      this.handlers.formSubmit = function(e) {
         e.preventDefault();
         self.submitFeedback();
-      });
+      };
+      this.form.addEventListener('submit', this.handlers.formSubmit);
 
       // Escape key to close modal
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && self.modal.style.display !== 'none') {
+      this.handlers.escapeKey = function(e) {
+        if (e.key === 'Escape' && self.modal && self.modal.style.display !== 'none') {
           self.hideModal();
         }
-      });
+      };
+      document.addEventListener('keydown', this.handlers.escapeKey);
     },
 
     showModal: function() {
@@ -226,6 +290,26 @@
   // Export to global scope
   window.LsaTdxFeedback = LsaTdxFeedback;
 
-  // Auto-initialize
-  LsaTdxFeedback.init();
+  // Initialize on DOM ready (for traditional page loads)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      LsaTdxFeedback.init();
+    });
+  } else {
+    // DOM already loaded
+    LsaTdxFeedback.init();
+  }
+
+  // Initialize on Turbo navigation (for Turbo Drive)
+  document.addEventListener('turbo:load', function() {
+    LsaTdxFeedback.init();
+  });
+
+  // Also handle turbo:frame-load for Turbo Frames (optional)
+  document.addEventListener('turbo:frame-load', function(e) {
+    // Only re-initialize if the frame contains our elements
+    if (e.target.querySelector && e.target.querySelector('#lsa-tdx-feedback-trigger')) {
+      LsaTdxFeedback.init();
+    }
+  });
 })();
