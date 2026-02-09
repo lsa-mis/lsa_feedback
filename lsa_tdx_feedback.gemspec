@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   # Runtime dependencies
-  spec.add_dependency 'httparty', '~> 0.22'
+  spec.add_dependency 'httparty', '~> 0.24.0'
   spec.add_dependency 'rails', '>= 6.0'
   spec.add_dependency 'redis', '>= 4.0'
 
