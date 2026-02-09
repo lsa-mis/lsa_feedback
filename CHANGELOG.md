@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Examples for protecting actions and excluding authentication for specific controllers
   - Documentation on using `allow_unauthenticated_access` for public pages
 
+## [1.0.4] - 2026-02-09
+
+### Changed
+- Updated `httparty` dependency (see gemspec for version constraint)
+
 ## [1.0.3] - 2025-12-08
 
 ### Fixed
