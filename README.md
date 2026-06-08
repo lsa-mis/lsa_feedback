@@ -304,21 +304,18 @@ This makes `current_user` available in all controllers and views, including Rail
 
 ### Step 3A: Create an initializer (config/initializers/lsa_tdx_feedback.rb) that skips authentication for the feedback controller, since feedback forms should be public
 
-```ruby
-# Configure lsa_tdx_feedback gem to allow unauthenticated access
-# Feedback forms should be accessible without authentication
-Rails.application.config.to_prepare do
-  if defined?(LsaTdxFeedback::FeedbackController)
-    LsaTdxFeedback::FeedbackController.class_eval do
-      # Skip authentication for feedback submissions
-      # Use raise: false to prevent errors if the before_action doesn't exist
-      skip_before_action :require_authentication, raise: false
-    end
-  end
-rescue => e
-  Rails.logger.warn("Could not configure LsaTdxFeedback: #{e.message}") if defined?(Rails.logger)
-end
+`LsaTdxFeedback::FeedbackController` inherits from the host app's `ApplicationController`. If that controller runs a global authentication `before_action`, anonymous submissions are rejected before the action executes, producing a `401 Unauthorized` on submit:
+
+```text
+Processing by LsaTdxFeedback::FeedbackController#create as */*
+Completed 401 Unauthorized in 8ms (ActiveRecord: 0.0ms)
 ```
+
+The 0‑query, sub‑10ms completion is the tell: the request was blocked by an authentication callback, not by the TDX API. Skip that callback for the feedback controller only.
+
+#### Rails 8 built-in authentication
+
+The Rails 8 generator names the callback `:require_authentication`:
 
 and update request_authentication in the Authentication concern ( app/controllers/concerns/authentication.rb ) to use main_app.new_session_path so it works when called from engine controllers.
 
@@ -329,6 +326,32 @@ and update request_authentication in the Authentication concern ( app/controller
 ...
 ```
 
+#### Devise
+
+Devise apps use `:authenticate_user!`. Skip that callback instead:
+
+```ruby
+# config/initializers/lsa_tdx_feedback.rb
+# Allow anonymous (signed-out) visitors to submit feedback.
+# The feedback modal is rendered on public pages, so skipping the host app's
+# Devise authentication callback prevents 401 Unauthorized responses on submit.
+Rails.application.config.to_prepare do
+  LsaTdxFeedback::FeedbackController.class_eval do
+    skip_before_action :authenticate_user!, raise: false
+  end
+end
+```
+
+For both setups, `to_prepare` re‑applies the change across code reloads in development, and `raise: false` keeps the app booting even if the callback name differs or changes in a future release.
+
+#### The email field is informational, not an identity
+
+The form requires an email **client‑side** before it allows submission, so the controller always receives a contact address. That value is **not authoritative** — any email can be entered, and it is recorded on the TDX ticket as‑is. For signed‑in users the email is auto‑populated for convenience (via `current_user_email_for_feedback`), but the authorization decision does **not** depend on it.
+
+#### What still protects the endpoint
+
+- **CSRF protection remains in effect.** The controller keeps `protect_from_forgery with: :exception`, so submissions must originate from your rendered pages with a valid CSRF token. This is the primary guard against scripted/anonymous abuse now that authentication is skipped.
+- **No server‑side email validation.** The controller permits `:email` and passes it straight through to the TDX ticket; it does **not** validate presence or format (that enforcement lives only in the browser). If you want a backend safety net so a crafted request can't create a ticket with a blank or malformed email, add that validation in the gem or in a controller override.
 
 ### Step 4: Protect Actions (Optional)
 
