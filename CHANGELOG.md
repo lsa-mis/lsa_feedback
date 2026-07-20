@@ -21,6 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added specs covering both cases (controller with and without `current_user`).
 
 ### Added
+- **I18n for the modal**: every visible string in the modal now comes from I18n,
+  scoped under `lsa_tdx_feedback.*` (English defaults ship in
+  `config/locales/en.yml`, auto-loaded by the engine). Host apps can translate to
+  other locales — or reword any string — by defining the same scoped keys in
+  their own locale files, which load after the gem's and win. Keys are namespaced
+  so they never collide with a host app's own I18n. (The JavaScript's runtime
+  status/validation messages are not yet localized — a follow-up.)
 - **Opt-out for the floating trigger button**: `lsa_tdx_feedback_modal(trigger: false)`
   (and `lsa_tdx_feedback(trigger: false)`) render the modal WITHOUT the built-in
   fixed bottom-right button, so a host can open it from its own control via

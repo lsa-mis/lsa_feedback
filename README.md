@@ -258,6 +258,26 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+### Translating or customizing the modal text
+
+The modal's visible strings come from I18n, scoped under `lsa_tdx_feedback.*`
+(English defaults ship with the gem and are auto-loaded). To translate to another
+locale — or to reword any string — define the same keys in your app's locale
+files; they load after the gem's, so they win:
+
+```yaml
+# config/locales/fr.yml
+fr:
+  lsa_tdx_feedback:
+    modal:
+      title: "Envoyer un commentaire"
+      submit: "Envoyer"
+      # ...override only what you need
+```
+
+See `config/locales/en.yml` in the gem for the full list of keys. (The
+JavaScript's runtime messages — submission success and client-side validation
+text — are not yet localized.)
 ### Delivery fallback (never lose feedback)
 
 By default, if TDX isn't configured — or a ticket can't be created — the modal
