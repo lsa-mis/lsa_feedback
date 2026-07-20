@@ -86,10 +86,16 @@
   </div>
 </div>
 
-<!-- Feedback Button -->
-<button id="lsa-tdx-feedback-trigger" class="lsa-tdx-feedback-trigger-btn" title="Send Feedback">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
-  </svg>
-  <span class="lsa-tdx-feedback-trigger-text">Feedback</span>
-</button>
+<%# Floating trigger button. Rendered by default; pass trigger: false to
+    lsa_tdx_feedback_modal to omit it and open the modal from your own control
+    via window.LsaTdxFeedback.showModal(). Defaults to true for callers that
+    render the partial without the local (backward compatible). %>
+<% if local_assigns.fetch(:trigger, true) %>
+  <!-- Feedback Button -->
+  <button id="lsa-tdx-feedback-trigger" class="lsa-tdx-feedback-trigger-btn" title="Send Feedback">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+    </svg>
+    <span class="lsa-tdx-feedback-trigger-text">Feedback</span>
+  </button>
+<% end %>

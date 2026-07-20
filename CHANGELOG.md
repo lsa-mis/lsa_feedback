@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Opt-out for the floating trigger button**: `lsa_tdx_feedback_modal(trigger: false)`
+  (and `lsa_tdx_feedback(trigger: false)`) render the modal WITHOUT the built-in
+  fixed bottom-right button, so a host can open it from its own control via
+  `window.LsaTdxFeedback.showModal()` — e.g. when the fixed button collides with
+  other fixed page chrome (cookie banners, toasts). Defaults to `true`; callers
+  that don't pass `trigger:` are unaffected.
 - **Documentation**: Added Rails 8 authentication setup instructions to README
   - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
   - Instructions for creating `current_user` helper method to match Devise pattern
