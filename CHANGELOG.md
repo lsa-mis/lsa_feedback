@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-07-20
+
 ### Fixed
 - **`NameError` on controllers that don't define `current_user`**: `set_lsa_tdx_feedback_data`
   referenced `current_user` unconditionally inside a debug log line, so it raised on any

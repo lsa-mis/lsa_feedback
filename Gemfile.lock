@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lsa_tdx_feedback (1.0.4)
+    lsa_tdx_feedback (2.0.0)
       httparty (~> 0.24.0)
       rails (>= 6.0)
       redis (>= 4.0)
