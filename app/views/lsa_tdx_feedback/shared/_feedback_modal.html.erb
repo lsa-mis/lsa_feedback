@@ -1,9 +1,12 @@
 <!-- LsaTdxFeedback Modal -->
-<div id="lsa-tdx-feedback-modal" class="lsa-tdx-feedback-modal" style="display: none;">
-  <div class="lsa-tdx-feedback-modal-backdrop"></div>
+<%# Native <dialog>: the browser promotes it to the top layer (renders above all
+    page content with no z-index needed) and makes the rest of the page inert,
+    so it can't be covered by, or fight, host chrome. The backdrop is the
+    ::backdrop pseudo-element (no manual backdrop div). %>
+<dialog id="lsa-tdx-feedback-modal" class="lsa-tdx-feedback-modal" aria-labelledby="lsa-tdx-feedback-title">
   <div class="lsa-tdx-feedback-modal-content">
     <div class="lsa-tdx-feedback-modal-header">
-      <h2>
+      <h2 id="lsa-tdx-feedback-title">
         <%= "[#{@lsa_tdx_feedback_app_name}]: " if defined?(@lsa_tdx_feedback_app_name) && @lsa_tdx_feedback_app_name.present? %><%= t('lsa_tdx_feedback.modal.title') %>
       </h2>
       <button type="button" class="lsa-tdx-feedback-close-btn" aria-label="<%= t('lsa_tdx_feedback.modal.close') %>">&times;</button>
@@ -84,7 +87,7 @@
       <div class="lsa-tdx-feedback-message-content"></div>
     </div>
   </div>
-</div>
+</dialog>
 
 <!-- Feedback Button -->
 <button id="lsa-tdx-feedback-trigger" class="lsa-tdx-feedback-trigger-btn" title="<%= t('lsa_tdx_feedback.modal.title') %>">
