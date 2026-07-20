@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **`NameError` on controllers that don't define `current_user`**: `set_lsa_tdx_feedback_data`
+  referenced `current_user` unconditionally inside a debug log line, so it raised on any
+  controller without that method — ViewComponent's preview controller,
+  `Rails::HealthController`, ActiveStorage's controllers, and so on. Because the extension is
+  mixed into `ActionController::Base` via `on_load :action_controller`, this broke those
+  requests in every host application.
+  - Removed the leftover per-request debug logging, which also drops six `Rails.logger.info`
+    calls emitted on every request of every controller.
+  - The documented `current_user_email_for_feedback` override point is unchanged, and it was
+    already guarded — email prefill still works exactly as before.
+  - Added specs covering both cases (controller with and without `current_user`).
+
 ### Added
 - **Documentation**: Added Rails 8 authentication setup instructions to README
   - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
