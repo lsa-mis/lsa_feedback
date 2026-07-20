@@ -1,0 +1,30 @@
+# All keys are scoped under `lsa_tdx_feedback.*` so they merge into a host
+# app's I18n without colliding with its own keys. Rails auto-loads this file
+# (Rails::Engine adds config/locales/**/*.yml to I18n.load_path). A host can
+# translate to other locales, or override any string, by defining the same
+# scoped keys in its own locale files (which load after the engine's, so they
+# win).
+en:
+  lsa_tdx_feedback:
+    modal:
+      title: "Send Feedback"
+      close: "Close"
+      category_label: "Category"
+      category_prompt: "Select a category"
+      categories:
+        bug: "Bug Report"
+        suggestion: "Suggestion"
+        feature: "Feature Request"
+        general: "General Feedback"
+        other: "Other"
+      feedback_label: "Your Feedback"
+      feedback_placeholder: "Please describe your feedback in detail..."
+      email_label: "Your Email"
+      email_placeholder: "your.email@example.com"
+      email_help: "Required - We'll use this to follow up on your feedback"
+      additional_info_label: "Additional Information"
+      additional_info_placeholder: "Any additional context or information..."
+      cancel: "Cancel"
+      submit: "Send Feedback"
+      sending: "Sending..."
+      trigger_label: "Feedback"

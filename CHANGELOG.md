@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **I18n for the modal**: every visible string in the modal now comes from I18n,
+  scoped under `lsa_tdx_feedback.*` (English defaults ship in
+  `config/locales/en.yml`, auto-loaded by the engine). Host apps can translate to
+  other locales — or reword any string — by defining the same scoped keys in
+  their own locale files, which load after the gem's and win. Keys are namespaced
+  so they never collide with a host app's own I18n. (The JavaScript's runtime
+  status/validation messages are not yet localized — a follow-up.)
 - **Documentation**: Added Rails 8 authentication setup instructions to README
   - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
   - Instructions for creating `current_user` helper method to match Devise pattern
