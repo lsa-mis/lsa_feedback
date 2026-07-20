@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **`NameError` on controllers that don't define `current_user`**: `set_lsa_tdx_feedback_data`
+  referenced `current_user` unconditionally inside a debug log line, so it raised on any
+  controller without that method — ViewComponent's preview controller,
+  `Rails::HealthController`, ActiveStorage's controllers, and so on. Because the extension is
+  mixed into `ActionController::Base` via `on_load :action_controller`, this broke those
+  requests in every host application.
+  - Removed the leftover per-request debug logging, which also drops six `Rails.logger.info`
+    calls emitted on every request of every controller.
+  - The documented `current_user_email_for_feedback` override point is unchanged, and it was
+    already guarded — email prefill still works exactly as before.
+  - Added specs covering both cases (controller with and without `current_user`).
+
 ### Added
 - **Opt-out for the floating trigger button**: `lsa_tdx_feedback_modal(trigger: false)`
   (and `lsa_tdx_feedback(trigger: false)`) render the modal WITHOUT the built-in
@@ -14,6 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `window.LsaTdxFeedback.showModal()` — e.g. when the fixed button collides with
   other fixed page chrome (cookie banners, toasts). Defaults to `true`; callers
   that don't pass `trigger:` are unaffected.
+- **Delivery fallback (`config.fallback`)**: an optional callable invoked with the
+  feedback data when a ticket can't be filed — TDX not configured, or the API call
+  raises — so feedback is never lost. The controller files a TDX ticket when TDX is
+  configured and the call succeeds, otherwise hands the data to your fallback (e.g.
+  emailing an admin, enqueuing a job). Defaults to `nil`, which preserves the
+  original behavior exactly: no fallback, error response on failure.
 - **Documentation**: Added Rails 8 authentication setup instructions to README
   - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
   - Instructions for creating `current_user` helper method to match Devise pattern

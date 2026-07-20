@@ -24,18 +24,9 @@ module LsaTdxFeedback
         nil
       end
 
-      # Logging
-      Rails.logger.info "set_lsa_tdx_feedback_data called"
-      Rails.logger.info "  respond_to? current_user_email_for_feedback: #{respond_to?(:current_user_email_for_feedback, true)}"
-      Rails.logger.info "  current_user available: #{respond_to?(:current_user, true)}"
-      Rails.logger.info "  current_user: #{current_user&.email || 'nil'}"
+      return unless respond_to?(:current_user_email_for_feedback, true)
 
-      if respond_to?(:current_user_email_for_feedback, true)
-        @lsa_tdx_feedback_user_email = current_user_email_for_feedback
-        Rails.logger.info "  @lsa_tdx_feedback_user_email set to: #{@lsa_tdx_feedback_user_email}"
-      else
-        Rails.logger.info "  current_user_email_for_feedback method not available"
-      end
+      @lsa_tdx_feedback_user_email = current_user_email_for_feedback
     end
 
     # Override this method in your ApplicationController to provide user email

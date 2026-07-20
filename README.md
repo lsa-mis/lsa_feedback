@@ -258,6 +258,30 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+### Delivery fallback (never lose feedback)
+
+By default, if TDX isn't configured — or a ticket can't be created — the modal
+shows an error. Set `config.fallback` to a callable and the gem hands it the
+feedback instead, so you can email an admin, enqueue a job, or log it, and the
+user still gets a success response:
+
+```ruby
+# config/initializers/lsa_tdx_feedback.rb
+LsaTdxFeedback.configure do |config|
+  # ...your TDX config...
+
+  config.fallback = ->(feedback_data) do
+    FeedbackMailer.submission(feedback_data).deliver_later
+  end
+end
+```
+
+The callable receives the same `feedback_data` hash the ticket would have used
+(`:feedback`, `:email`, `:category`, `:url`, `:user_agent`, `:additional_info`,
+`:title`, `:priority_id`). When `config.fallback` is `nil` (the default), behavior
+is unchanged. A TDX ticket is still filed when TDX is configured and the call
+succeeds — the fallback runs only when it can't.
+
 ## Rails 8 Authentication Setup
 
 If you're using Rails 8.1.1's built-in authentication system, here's how to set it up and create a `current_user` helper method similar to Devise.
