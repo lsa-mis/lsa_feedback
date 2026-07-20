@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Delivery fallback (`config.fallback`)**: an optional callable invoked with the
+  feedback data when a ticket can't be filed — TDX not configured, or the API call
+  raises — so feedback is never lost. The controller files a TDX ticket when TDX is
+  configured and the call succeeds, otherwise hands the data to your fallback (e.g.
+  emailing an admin, enqueuing a job). Defaults to `nil`, which preserves the
+  original behavior exactly: no fallback, error response on failure.
 - **Documentation**: Added Rails 8 authentication setup instructions to README
   - Step-by-step guide for generating Rails 8.1.1's built-in authentication system
   - Instructions for creating `current_user` helper method to match Devise pattern

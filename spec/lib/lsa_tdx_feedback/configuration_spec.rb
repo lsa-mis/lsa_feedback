@@ -25,6 +25,21 @@ RSpec.describe LsaTdxFeedback::Configuration do
     end
   end
 
+  describe '#fallback' do
+    it 'defaults to nil (no fallback delivery)' do
+      expect(config.fallback).to be_nil
+    end
+
+    it 'accepts a callable that receives the feedback data' do
+      received = nil
+      config.fallback = ->(data) { received = data }
+
+      config.fallback.call(feedback: 'hi', email: 'u@example.com')
+
+      expect(received).to eq(feedback: 'hi', email: 'u@example.com')
+    end
+  end
+
   describe '#oauth_scope' do
     it 'returns the correct scope' do
       expect(config.oauth_scope).to eq('https://gw-test.api.it.umich.edu/um/it tdxticket')
