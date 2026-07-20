@@ -302,6 +302,29 @@ The callable receives the same `feedback_data` hash the ticket would have used
 is unchanged. A TDX ticket is still filed when TDX is configured and the call
 succeeds — the fallback runs only when it can't.
 
+### Theming (colors, dark mode, accessibility)
+
+The modal is a native `<dialog>` — it renders in the browser's top layer (above
+your page chrome, with a built-in focus trap and Escape handling), so it needs
+no z-index coordination with the rest of your app.
+
+Its styling ships **WCAG 2.2 AAA** defaults (7:1 text contrast, 44px touch
+targets) in both light and dark, and exposes colors and sizes as CSS custom
+properties. To rebrand, override any of them in a stylesheet loaded after the
+gem's:
+
+```css
+:root {
+  --lsa-tdx-feedback-accent: #6d28d9;         /* your brand color */
+  --lsa-tdx-feedback-accent-hover: #5b21b6;
+  --lsa-tdx-feedback-surface: #ffffff;
+  /* full list in app/assets/stylesheets/lsa_tdx_feedback.css */
+}
+```
+
+A `prefers-color-scheme: dark` variant is built in, and the modal's field colors
+are pinned so a theme-aware host app can't bleed low-contrast text into them.
+
 ## Rails 8 Authentication Setup
 
 If you're using Rails 8.1.1's built-in authentication system, here's how to set it up and create a `current_user` helper method similar to Devise.

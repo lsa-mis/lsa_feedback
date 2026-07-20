@@ -46,6 +46,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Examples for protecting actions and excluding authentication for specific controllers
   - Documentation on using `allow_unauthenticated_access` for public pages
 
+### Changed
+- **Modal is now a native `<dialog>`**: it renders in the browser's top layer
+  (above all page content, no z-index needed) with a built-in focus trap and
+  native Escape handling, so it no longer competes with host page chrome or
+  relies on a hand-rolled backdrop/focus/escape. The JS now saves and restores
+  the host's `document.body` overflow on open/close instead of clearing it
+  (which could clobber another component's scroll lock).
+- **WCAG 2.2 AAA defaults + themeable tokens**: the stylesheet now targets AAA
+  (7:1 text contrast, 44px minimum touch targets) in light and dark, and its
+  colors/sizes are exposed as `--lsa-tdx-feedback-*` CSS custom properties for
+  rebranding without copying the stylesheet. A `prefers-color-scheme: dark`
+  variant is included, and the modal's field colors are pinned so a theme-aware
+  host app can't bleed low-contrast text into them. This changes the modal's
+  default appearance (notably a darker, AAA-contrast accent).
+
+### Breaking
+- The modal's outer element changed from `<div>` to `<dialog>`, and the
+  `.lsa-tdx-feedback-modal-backdrop` div was removed (the backdrop is now the
+  `::backdrop` pseudo-element). If you override the modal partial, or style the
+  old backdrop div, update accordingly. Custom colors/sizes previously set by
+  editing the stylesheet should move to the `--lsa-tdx-feedback-*` properties.
+
 ## [1.0.4] - 2026-02-09
 
 ### Changed

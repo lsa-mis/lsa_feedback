@@ -13,9 +13,9 @@
       triggerClick: null,
       closeClick: null,
       cancelClick: null,
-      backdropClick: null,
+      dialogClick: null,
       formSubmit: null,
-      escapeKey: null
+      dialogClose: null
     },
 
     init: function() {
@@ -53,7 +53,6 @@
       if (this.modal) {
         var closeBtn = this.modal.querySelector('.lsa-tdx-feedback-close-btn');
         var cancelBtn = this.modal.querySelector('.lsa-tdx-feedback-cancel-btn');
-        var backdrop = this.modal.querySelector('.lsa-tdx-feedback-modal-backdrop');
 
         if (closeBtn && this.handlers.closeClick) {
           closeBtn.removeEventListener('click', this.handlers.closeClick);
@@ -61,8 +60,11 @@
         if (cancelBtn && this.handlers.cancelClick) {
           cancelBtn.removeEventListener('click', this.handlers.cancelClick);
         }
-        if (backdrop && this.handlers.backdropClick) {
-          backdrop.removeEventListener('click', this.handlers.backdropClick);
+        if (this.handlers.dialogClick) {
+          this.modal.removeEventListener('click', this.handlers.dialogClick);
+        }
+        if (this.handlers.dialogClose) {
+          this.modal.removeEventListener('close', this.handlers.dialogClose);
         }
       }
 
@@ -70,18 +72,14 @@
         this.form.removeEventListener('submit', this.handlers.formSubmit);
       }
 
-      if (this.handlers.escapeKey) {
-        document.removeEventListener('keydown', this.handlers.escapeKey);
-      }
-
       // Clear handler references
       this.handlers = {
         triggerClick: null,
         closeClick: null,
         cancelClick: null,
-        backdropClick: null,
+        dialogClick: null,
         formSubmit: null,
-        escapeKey: null
+        dialogClose: null
       };
     },
 
@@ -110,7 +108,6 @@
       // Close buttons
       var closeBtn = this.modal.querySelector('.lsa-tdx-feedback-close-btn');
       var cancelBtn = this.modal.querySelector('.lsa-tdx-feedback-cancel-btn');
-      var backdrop = this.modal.querySelector('.lsa-tdx-feedback-modal-backdrop');
 
       if (closeBtn) {
         this.handlers.closeClick = function(e) {
@@ -128,14 +125,23 @@
         cancelBtn.addEventListener('click', this.handlers.cancelClick);
       }
 
-      if (backdrop) {
-        this.handlers.backdropClick = function(e) {
-          if (e.target === backdrop) {
-            self.hideModal();
-          }
-        };
-        backdrop.addEventListener('click', this.handlers.backdropClick);
-      }
+      // Backdrop click: on a native <dialog>, a click whose target is the
+      // dialog element itself (not its content) lands on the ::backdrop.
+      this.handlers.dialogClick = function(e) {
+        if (e.target === self.modal) {
+          self.hideModal();
+        }
+      };
+      this.modal.addEventListener('click', this.handlers.dialogClick);
+
+      // Runs on every close — button, backdrop, or the dialog's native Escape
+      // handling — so cleanup happens once, wherever the close came from.
+      this.handlers.dialogClose = function() {
+        document.body.style.overflow = self._previousBodyOverflow || '';
+        self.resetForm();
+        self.hideMessage();
+      };
+      this.modal.addEventListener('close', this.handlers.dialogClose);
 
       // Form submission
       this.handlers.formSubmit = function(e) {
@@ -143,20 +149,23 @@
         self.submitFeedback();
       };
       this.form.addEventListener('submit', this.handlers.formSubmit);
-
-      // Escape key to close modal
-      this.handlers.escapeKey = function(e) {
-        if (e.key === 'Escape' && self.modal && self.modal.style.display !== 'none') {
-          self.hideModal();
-        }
-      };
-      document.addEventListener('keydown', this.handlers.escapeKey);
     },
 
     showModal: function() {
       if (!this.modal) return;
 
-      this.modal.style.display = 'block';
+      // Native modal dialog: top layer + page inert + built-in focus trap.
+      if (typeof this.modal.showModal === 'function') {
+        this.modal.showModal();
+      } else {
+        // Older browsers without <dialog>: fall back to a visible dialog.
+        this.modal.setAttribute('open', '');
+      }
+
+      // Save the host's body overflow so we can RESTORE it on close rather
+      // than blindly clearing it (which would clobber a scroll lock another
+      // component may have set).
+      this._previousBodyOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
 
       // Focus on first input
@@ -173,10 +182,13 @@
     hideModal: function() {
       if (!this.modal) return;
 
-      this.modal.style.display = 'none';
-      document.body.style.overflow = '';
-      this.resetForm();
-      this.hideMessage();
+      // The 'close' event handler restores body scroll + resets the form.
+      if (typeof this.modal.close === 'function') {
+        this.modal.close();
+      } else {
+        this.modal.removeAttribute('open');
+        if (this.handlers.dialogClose) this.handlers.dialogClose();
+      }
     },
 
     resetForm: function() {

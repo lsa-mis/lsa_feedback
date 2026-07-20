@@ -1,35 +1,98 @@
 /* LsaTdxFeedback Styles - Self-contained and namespaced */
 
+/*
+ * Themeable tokens. Override any of these in your own stylesheet (loaded after
+ * this one) to rebrand the modal without copying it. Defaults target WCAG 2.2
+ * AAA: 7:1 text contrast and 44px minimum touch targets, in light and dark.
+ */
+:root {
+  --lsa-tdx-feedback-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --lsa-tdx-feedback-surface: #ffffff;
+  --lsa-tdx-feedback-text: #1a1a1a;
+  --lsa-tdx-feedback-text-muted: #33383f;   /* >= 7:1 on the surface */
+  --lsa-tdx-feedback-border: #ced4da;
+
+  --lsa-tdx-feedback-field-bg: #ffffff;
+  --lsa-tdx-feedback-field-text: #1a1a1a;
+  --lsa-tdx-feedback-placeholder: #4b5563;  /* >= 7:1 on the field */
+
+  --lsa-tdx-feedback-accent: #1e3a8a;       /* white text on this is >= 7:1 */
+  --lsa-tdx-feedback-accent-hover: #172e6e;
+  --lsa-tdx-feedback-on-accent: #ffffff;
+  --lsa-tdx-feedback-focus-ring: rgba(30, 58, 138, 0.35);
+
+  --lsa-tdx-feedback-backdrop: rgba(0, 0, 0, 0.5);
+  --lsa-tdx-feedback-target-min: 44px;      /* WCAG 2.5.5 */
+
+  --lsa-tdx-feedback-success-bg: #d4edda;
+  --lsa-tdx-feedback-success-text: #0f5132; /* >= 7:1 on success-bg */
+  --lsa-tdx-feedback-success-border: #badbcc;
+  --lsa-tdx-feedback-error-bg: #f8d7da;
+  --lsa-tdx-feedback-error-text: #842029;   /* >= 7:1 on error-bg */
+  --lsa-tdx-feedback-error-border: #f5c2c7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lsa-tdx-feedback-surface: #1e232b;
+    --lsa-tdx-feedback-text: #f1f5f9;
+    --lsa-tdx-feedback-text-muted: #c4ccd6;
+    --lsa-tdx-feedback-border: #333b45;
+
+    --lsa-tdx-feedback-field-bg: #12161c;
+    --lsa-tdx-feedback-field-text: #f1f5f9;
+    --lsa-tdx-feedback-placeholder: #b3bcc9;
+
+    /* accent + white text stay AAA on the dark surface */
+
+    --lsa-tdx-feedback-success-bg: #0f2e1d;
+    --lsa-tdx-feedback-success-text: #a7f3d0;
+    --lsa-tdx-feedback-success-border: #1c4a30;
+    --lsa-tdx-feedback-error-bg: #3b1418;
+    --lsa-tdx-feedback-error-text: #fecaca;
+    --lsa-tdx-feedback-error-border: #5b1d23;
+  }
+}
+
 /* Trigger Button */
 .lsa-tdx-feedback-trigger-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #0D6EFD;
-  color: white;
+  min-width: var(--lsa-tdx-feedback-target-min);
+  min-height: var(--lsa-tdx-feedback-target-min);
+  background: var(--lsa-tdx-feedback-accent);
+  color: var(--lsa-tdx-feedback-on-accent);
   border: none;
   border-radius: 25px;
   padding: 12px 20px;
   font-size: 14px;
   font-weight: 600;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--lsa-tdx-feedback-font);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transition: all 0.2s ease;
   z-index: 9998;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
 .lsa-tdx-feedback-trigger-btn:hover {
-  background: #0056b3;
+  background: var(--lsa-tdx-feedback-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
 .lsa-tdx-feedback-trigger-btn:active {
   transform: translateY(0);
+}
+
+.lsa-tdx-feedback-trigger-btn:focus-visible {
+  outline: 3px solid var(--lsa-tdx-feedback-accent);
+  outline-offset: 2px;
 }
 
 .lsa-tdx-feedback-trigger-text {
@@ -44,43 +107,39 @@
     font-size: 13px;
   }
 
+  /* min-width/min-height keep the 44px floor even with the label hidden */
   .lsa-tdx-feedback-trigger-text {
     display: none;
   }
 }
 
-/* Modal Styles */
+/*
+ * Modal — a native <dialog>. The browser promotes it to the top layer (renders
+ * above all page content, no z-index needed) and makes the rest of the page
+ * inert. The dialog element itself is the visible panel; the backdrop is the
+ * ::backdrop pseudo-element.
+ */
 .lsa-tdx-feedback-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-.lsa-tdx-feedback-modal-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
-
-.lsa-tdx-feedback-modal-content {
-  position: relative;
-  background: white;
+  padding: 0;
+  border: none;
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  background: var(--lsa-tdx-feedback-surface);
+  color: var(--lsa-tdx-feedback-text);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-  margin: 5vh auto;
+  font-family: var(--lsa-tdx-feedback-font);
+}
+
+.lsa-tdx-feedback-modal[open] {
   animation: lsa-tdx-feedback-modal-enter 0.3s ease-out;
+}
+
+.lsa-tdx-feedback-modal::backdrop {
+  background: var(--lsa-tdx-feedback-backdrop);
+  backdrop-filter: blur(4px);
 }
 
 @keyframes lsa-tdx-feedback-modal-enter {
@@ -94,9 +153,20 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .lsa-tdx-feedback-modal[open] {
+    animation: none;
+  }
+}
+
+/* Content is now a plain wrapper — the dialog element carries the panel look. */
+.lsa-tdx-feedback-modal-content {
+  position: relative;
+}
+
 .lsa-tdx-feedback-modal-header {
   padding: 24px 24px 16px;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--lsa-tdx-feedback-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -106,18 +176,19 @@
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: #212529;
+  color: var(--lsa-tdx-feedback-text);
 }
 
 .lsa-tdx-feedback-close-btn {
   background: none;
   border: none;
   font-size: 24px;
-  color: #6c757d;
+  line-height: 1;
+  color: var(--lsa-tdx-feedback-text-muted);
   cursor: pointer;
   padding: 0;
-  width: 32px;
-  height: 32px;
+  min-width: var(--lsa-tdx-feedback-target-min);
+  min-height: var(--lsa-tdx-feedback-target-min);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,8 +197,13 @@
 }
 
 .lsa-tdx-feedback-close-btn:hover {
-  background: #f8f9fa;
-  color: #495057;
+  background: var(--lsa-tdx-feedback-border);
+  color: var(--lsa-tdx-feedback-text);
+}
+
+.lsa-tdx-feedback-close-btn:focus-visible {
+  outline: 3px solid var(--lsa-tdx-feedback-accent);
+  outline-offset: 2px;
 }
 
 .lsa-tdx-feedback-modal-body {
@@ -142,7 +218,7 @@
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
-  color: #495057;
+  color: var(--lsa-tdx-feedback-text);
   font-size: 14px;
 }
 
@@ -151,7 +227,12 @@
 .lsa-tdx-feedback-form-group textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #ced4da;
+  min-height: var(--lsa-tdx-feedback-target-min);
+  /* Pin field colors so a theme-aware host app's global form styles can't
+     bleed light-on-light (or dark-on-dark) into the modal. */
+  background-color: var(--lsa-tdx-feedback-field-bg);
+  color: var(--lsa-tdx-feedback-field-text);
+  border: 1px solid var(--lsa-tdx-feedback-border);
   border-radius: 6px;
   font-size: 14px;
   font-family: inherit;
@@ -159,12 +240,17 @@
   box-sizing: border-box;
 }
 
+.lsa-tdx-feedback-form-group input::placeholder,
+.lsa-tdx-feedback-form-group textarea::placeholder {
+  color: var(--lsa-tdx-feedback-placeholder);
+}
+
 .lsa-tdx-feedback-form-group input:focus,
 .lsa-tdx-feedback-form-group select:focus,
 .lsa-tdx-feedback-form-group textarea:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: var(--lsa-tdx-feedback-accent);
+  box-shadow: 0 0 0 3px var(--lsa-tdx-feedback-focus-ring);
 }
 
 .lsa-tdx-feedback-form-group textarea {
@@ -176,7 +262,7 @@
   display: block;
   margin-top: 4px;
   font-size: 12px;
-  color: #6c757d;
+  color: var(--lsa-tdx-feedback-text-muted);
 }
 
 .lsa-tdx-feedback-modal-footer {
@@ -188,6 +274,7 @@
 
 .lsa-tdx-feedback-btn {
   padding: 10px 20px;
+  min-height: var(--lsa-tdx-feedback-target-min);
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
@@ -196,33 +283,39 @@
   border: 1px solid transparent;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-family: inherit;
 }
 
+.lsa-tdx-feedback-btn:focus-visible {
+  outline: 3px solid var(--lsa-tdx-feedback-accent);
+  outline-offset: 2px;
+}
+
 .lsa-tdx-feedback-btn-primary {
-  background: #007bff;
-  color: white;
+  background: var(--lsa-tdx-feedback-accent);
+  color: var(--lsa-tdx-feedback-on-accent);
 }
 
 .lsa-tdx-feedback-btn-primary:hover:not(:disabled) {
-  background: #0056b3;
+  background: var(--lsa-tdx-feedback-accent-hover);
 }
 
 .lsa-tdx-feedback-btn-primary:disabled {
-  background: #6c757d;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 
 .lsa-tdx-feedback-btn-secondary {
-  background: white;
-  color: #6c757d;
-  border-color: #ced4da;
+  background: var(--lsa-tdx-feedback-surface);
+  color: var(--lsa-tdx-feedback-text-muted);
+  border-color: var(--lsa-tdx-feedback-border);
 }
 
 .lsa-tdx-feedback-btn-secondary:hover {
-  background: #f8f9fa;
-  color: #495057;
+  background: var(--lsa-tdx-feedback-border);
+  color: var(--lsa-tdx-feedback-text);
 }
 
 .lsa-tdx-feedback-loading-spinner {
@@ -234,6 +327,12 @@
   to { transform: rotate(360deg); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .lsa-tdx-feedback-loading-spinner {
+    animation-duration: 0s;
+  }
+}
+
 /* Messages */
 .lsa-tdx-feedback-message {
   margin: 16px 24px 0;
@@ -243,23 +342,22 @@
 }
 
 .lsa-tdx-feedback-message.success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background: var(--lsa-tdx-feedback-success-bg);
+  color: var(--lsa-tdx-feedback-success-text);
+  border: 1px solid var(--lsa-tdx-feedback-success-border);
 }
 
 .lsa-tdx-feedback-message.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background: var(--lsa-tdx-feedback-error-bg);
+  color: var(--lsa-tdx-feedback-error-text);
+  border: 1px solid var(--lsa-tdx-feedback-error-border);
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .lsa-tdx-feedback-modal-content {
-    margin: 2vh auto;
-    max-height: 96vh;
+  .lsa-tdx-feedback-modal {
     width: 95%;
+    max-height: 96vh;
   }
 
   .lsa-tdx-feedback-modal-header,
@@ -274,6 +372,5 @@
 
   .lsa-tdx-feedback-btn {
     width: 100%;
-    justify-content: center;
   }
 }
