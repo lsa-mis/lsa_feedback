@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added specs covering both cases (controller with and without `current_user`).
 
 ### Added
+- **Opt-out for the floating trigger button**: `lsa_tdx_feedback_modal(trigger: false)`
+  (and `lsa_tdx_feedback(trigger: false)`) render the modal WITHOUT the built-in
+  fixed bottom-right button, so a host can open it from its own control via
+  `window.LsaTdxFeedback.showModal()` — e.g. when the fixed button collides with
+  other fixed page chrome (cookie banners, toasts). Defaults to `true`; callers
+  that don't pass `trigger:` are unaffected.
 - **Delivery fallback (`config.fallback`)**: an optional callable invoked with the
   feedback data when a ticket can't be filed — TDX not configured, or the API call
   raises — so feedback is never lost. The controller files a TDX ticket when TDX is

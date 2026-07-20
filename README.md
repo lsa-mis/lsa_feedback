@@ -148,6 +148,26 @@ This avoids FOUC (flash of unstyled content) and ensures the script loads after 
 - **Optimal loading (recommended)**: Use the separate helpers so CSS loads in `<head>` and JS loads just before `</body>`. This avoids FOUC and keeps asset order predictable.
 - **Convenience**: Use `lsa_tdx_feedback` (all‑in‑one) for quick setup. It injects CSS/JS plus the modal where it’s called, which can delay CSS and is less ideal for performance.
 
+#### Bring your own trigger
+
+By default the modal ships a fixed bottom‑right floating button. To render the
+modal **without** it — and open it from your own control (a nav link, a footer
+button) — pass `trigger: false` and call `window.LsaTdxFeedback.showModal()`:
+
+```erb
+<%= lsa_tdx_feedback_modal(trigger: false) %>
+
+<button type="button" id="my-feedback-link">Send feedback</button>
+<script>
+  document.getElementById('my-feedback-link')
+    .addEventListener('click', () => window.LsaTdxFeedback.showModal());
+</script>
+```
+
+This is handy when the fixed button overlaps other fixed page chrome (a cookie
+banner, toasts), or when you want feedback reachable from a specific place in
+your own UI. `lsa_tdx_feedback(trigger: false)` works the same way.
+
 #### Recommended placement (optimal)
 
 ```erb
