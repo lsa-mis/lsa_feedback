@@ -5,9 +5,15 @@ module LsaTdxFeedback
       "HELPER IS WORKING!".html_safe
     end
 
-    # Renders the feedback modal and trigger button
-    def lsa_tdx_feedback_modal
-      render(partial: 'lsa_tdx_feedback/shared/feedback_modal')
+    # Renders the feedback modal and, by default, the floating trigger button.
+    #
+    # Pass trigger: false to render the modal WITHOUT the built-in floating
+    # button, and open it yourself from your own control (a nav link, a footer
+    # button, etc.) via `window.LsaTdxFeedback.showModal()`. Useful when the
+    # fixed bottom-right button collides with other fixed page chrome, or when
+    # you want feedback reachable from a specific place in your own UI.
+    def lsa_tdx_feedback_modal(trigger: true)
+      render(partial: 'lsa_tdx_feedback/shared/feedback_modal', locals: { trigger: trigger })
     end
 
     # Includes the feedback gem CSS
@@ -27,10 +33,11 @@ module LsaTdxFeedback
       (css + js).html_safe
     end
 
-    # All-in-one helper that includes both modal and assets
-    def lsa_tdx_feedback
+    # All-in-one helper that includes both modal and assets.
+    # Passes trigger: through to lsa_tdx_feedback_modal (see there).
+    def lsa_tdx_feedback(trigger: true)
       assets = lsa_tdx_feedback_assets
-      modal = lsa_tdx_feedback_modal
+      modal = lsa_tdx_feedback_modal(trigger: trigger)
       (assets + modal).html_safe
     end
   end

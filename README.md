@@ -148,6 +148,26 @@ This avoids FOUC (flash of unstyled content) and ensures the script loads after 
 - **Optimal loading (recommended)**: Use the separate helpers so CSS loads in `<head>` and JS loads just before `</body>`. This avoids FOUC and keeps asset order predictable.
 - **Convenience**: Use `lsa_tdx_feedback` (all‑in‑one) for quick setup. It injects CSS/JS plus the modal where it’s called, which can delay CSS and is less ideal for performance.
 
+#### Bring your own trigger
+
+By default the modal ships a fixed bottom‑right floating button. To render the
+modal **without** it — and open it from your own control (a nav link, a footer
+button) — pass `trigger: false` and call `window.LsaTdxFeedback.showModal()`:
+
+```erb
+<%= lsa_tdx_feedback_modal(trigger: false) %>
+
+<button type="button" id="my-feedback-link">Send feedback</button>
+<script>
+  document.getElementById('my-feedback-link')
+    .addEventListener('click', () => window.LsaTdxFeedback.showModal());
+</script>
+```
+
+This is handy when the fixed button overlaps other fixed page chrome (a cookie
+banner, toasts), or when you want feedback reachable from a specific place in
+your own UI. `lsa_tdx_feedback(trigger: false)` works the same way.
+
 #### Recommended placement (optimal)
 
 ```erb
@@ -258,6 +278,29 @@ fr:
 See `config/locales/en.yml` in the gem for the full list of keys. (The
 JavaScript's runtime messages — submission success and client-side validation
 text — are not yet localized.)
+### Delivery fallback (never lose feedback)
+
+By default, if TDX isn't configured — or a ticket can't be created — the modal
+shows an error. Set `config.fallback` to a callable and the gem hands it the
+feedback instead, so you can email an admin, enqueue a job, or log it, and the
+user still gets a success response:
+
+```ruby
+# config/initializers/lsa_tdx_feedback.rb
+LsaTdxFeedback.configure do |config|
+  # ...your TDX config...
+
+  config.fallback = ->(feedback_data) do
+    FeedbackMailer.submission(feedback_data).deliver_later
+  end
+end
+```
+
+The callable receives the same `feedback_data` hash the ticket would have used
+(`:feedback`, `:email`, `:category`, `:url`, `:user_agent`, `:additional_info`,
+`:title`, `:priority_id`). When `config.fallback` is `nil` (the default), behavior
+is unchanged. A TDX ticket is still filed when TDX is configured and the call
+succeeds — the fallback runs only when it can't.
 
 ## Rails 8 Authentication Setup
 

@@ -4,7 +4,15 @@ module LsaTdxFeedback
                   :default_type_id, :default_form_id, :default_classification,
                   :default_status_id, :default_priority_id, :default_responsible_group_id,
                   :default_service_id, :default_source_id, :service_offering_id, :account_id,
-                  :cache_store, :cache_expiry
+                  :cache_store, :cache_expiry,
+                  # Optional callable invoked with the feedback data hash when a
+                  # ticket can't be filed — TDX not configured, or the API call
+                  # raises — so feedback is never lost. It receives the same
+                  # feedback_data the ticket would have used (see
+                  # FeedbackController#create) and is responsible for delivering
+                  # it (e.g. emailing an admin). nil (default) preserves the
+                  # original behavior: no fallback, controller returns an error.
+                  :fallback
 
     def initialize
       # All values must be configured by the application for security
@@ -27,6 +35,9 @@ module LsaTdxFeedback
       # Cache configuration
       @cache_store = :redis_cache_store
       @cache_expiry = 3600 # 1 hour for OAuth tokens
+
+      # Optional delivery fallback (see attr_accessor above)
+      @fallback = nil
     end
 
     def oauth_scope
