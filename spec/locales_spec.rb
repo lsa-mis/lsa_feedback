@@ -32,4 +32,9 @@ RSpec.describe 'lsa_tdx_feedback locales' do
       expect(defined_keys).to include(key), "view references undefined locale key: #{key}"
     end
   end
+
+  it 'declares the floating trigger id only once (avoids a dead stacked duplicate button)' do
+    view = File.read(File.join(root, 'app/views/lsa_tdx_feedback/shared/_feedback_modal.html.erb'))
+    expect(view.scan(/id="lsa-tdx-feedback-trigger"/).size).to eq(1)
+  end
 end

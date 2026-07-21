@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-07-21
+
+### Fixed
+- **Duplicate floating trigger button**: the modal partial rendered two
+  `#lsa-tdx-feedback-trigger` buttons (an i18n button outside the `trigger:`
+  guard, plus the old hardcoded button inside it). The JS click handler bound
+  only to the first; the second sat on top and swallowed clicks, so the modal
+  never opened and produced no console or server errors. Also meant
+  `trigger: false` still left a button on the page. There is now a single
+  i18n button inside the `trigger:` guard.
+
 ## [2.0.0] - 2026-07-20
 
 ### Fixed
